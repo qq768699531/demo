@@ -11,4 +11,10 @@ public class DemoController {
     public String Test(){
         return "test";
     }
+
+    @RequestMapping("login")
+    @ResponseBody
+    public String Login(){
+        return "0";
+    }
 }
