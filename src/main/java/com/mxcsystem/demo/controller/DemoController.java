@@ -15,6 +15,6 @@ public class DemoController {
     @RequestMapping("login")
     @ResponseBody
     public String Login(){
-        return "0";
+        return "test";
     }
 }
