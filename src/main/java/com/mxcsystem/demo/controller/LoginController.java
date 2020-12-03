@@ -38,10 +38,10 @@ public class LoginController {
      */
     @RequestMapping("/checkLoginValidateCode")
     @ResponseBody
-    public HashMap checkLoginValidateCode(HttpServletRequest request,
+    public HashMap<String,Object> checkLoginValidateCode(HttpServletRequest request,
                                           @RequestParam("validateCode")String validateCode) {
         String loginValidateCode = request.getSession().getAttribute(LOGIN_VALIDATE_CODE).toString();
-        HashMap<String,Object> map = new HashMap<String,Object>();
+        HashMap<String,Object> map = new HashMap<>();
         if(loginValidateCode == null){
             map.put("status",null);//验证码过期
         }else if(loginValidateCode.equals(validateCode)){
@@ -55,11 +55,11 @@ public class LoginController {
 
     @RequestMapping("/checkLogin")
     @ResponseBody
-    public HashMap checkLogin(HttpServletRequest request,
+    public HashMap<String,Object> checkLogin(HttpServletRequest request,
                               @RequestParam("validateCode")String validateCode,
                               @RequestParam("username")String username,
                               @RequestParam("password")String password){
-        HashMap<String,Object> map = new HashMap<String,Object>();
+        HashMap<String,Object> map = new HashMap<>();
         String loginValidateCode = request.getSession().getAttribute(LOGIN_VALIDATE_CODE).toString();
         if(loginValidateCode == null){
             map.put("validateStatus",null);//验证码过期
