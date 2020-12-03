@@ -65,11 +65,14 @@ public class LoginController {
             map = (HashMap<String,Object>) request.getSession().getAttribute("identity");
             return map;
         }
-
-        String loginValidateCode = request.getSession().getAttribute(LOGIN_VALIDATE_CODE).toString();
-        if(loginValidateCode == null){
+        String loginValidateCode = "";
+        try{
+            loginValidateCode = request.getSession().getAttribute(LOGIN_VALIDATE_CODE).toString();
+        }catch (NullPointerException e){
             map.put("validateStatus",null);//验证码过期
-        }else if(loginValidateCode.equals(validateCode)){
+        }
+
+        if(loginValidateCode.equals(validateCode)){
             map.put("validateStatus",true);//验证码正确
             if(loginService.checkLogin(username, password)){
                 map.put("loginStatus","true");

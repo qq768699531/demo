@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface LoginMapper {
-    @Select("select * from worker where username = #{username} and password = #{password}")
+    @Select("select * from worker where name = #{username} and password = #{password}")
     boolean checkLogin(String username,String password);
 }
