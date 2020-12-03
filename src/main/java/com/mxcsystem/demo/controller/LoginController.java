@@ -53,6 +53,7 @@ public class LoginController {
         return map;
     }
 
+    @SuppressWarnings("unchecked")
     @RequestMapping("/checkLogin")
     @ResponseBody
     public HashMap<String,Object> checkLogin(HttpServletRequest request,
@@ -60,6 +61,11 @@ public class LoginController {
                               @RequestParam("username")String username,
                               @RequestParam("password")String password){
         HashMap<String,Object> map = new HashMap<>();
+        if(request.getSession().getAttribute("identity") != null){
+            map = (HashMap<String,Object>) request.getSession().getAttribute("identity");
+            return map;
+        }
+
         String loginValidateCode = request.getSession().getAttribute(LOGIN_VALIDATE_CODE).toString();
         if(loginValidateCode == null){
             map.put("validateStatus",null);//验证码过期
