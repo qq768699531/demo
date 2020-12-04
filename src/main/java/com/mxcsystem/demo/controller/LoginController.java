@@ -27,8 +27,23 @@ public class LoginController {
      * 登录验证码图片
      */
     @RequestMapping("/loginValidateCode")
-    public void loginValidateCode(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public void loginValidateCode(HttpServletRequest request,
+                                    HttpServletResponse response) throws Exception{
         CommonUtil.validateCode(request,response,captchaProducer,LOGIN_VALIDATE_CODE);
+        //System.out.println(request.getSession().getId());
+        //return request.getSession().getId();
+    }
+
+    /**
+     *
+     * @param phone 手机号码
+     * @throws Exception 错误
+     */
+    @RequestMapping("/sendSMS")
+    public void sendSMS(HttpServletRequest request,
+                        HttpServletResponse response,
+                        @RequestParam("phone")String phone) throws Exception {
+        CommonUtil.phoneValidateCode(request,response,captchaProducer,LOGIN_VALIDATE_CODE,phone);
     }
 
     /**
@@ -53,16 +68,16 @@ public class LoginController {
     @SuppressWarnings("unchecked")
     @RequestMapping("/checkLogin")
     public HashMap<String,Object> checkLogin(HttpServletRequest request,
-                                 @RequestParam("validateCode")String validateCode,
-                                 @RequestParam("username")String username,
-                                 @RequestParam("password")String password){
+                                             @RequestParam("validateCode")String validateCode,
+                                             @RequestParam("username")String username,
+                                             @RequestParam("password")String password){
         HashMap<String,Object> map = new HashMap<>();
         if(request.getSession().getAttribute("identity") != null){
             map = (HashMap<String,Object>) request.getSession().getAttribute("identity");
             return map;
         }
         String loginValidateCode = "";
-        //System.out.println(request.getSession().getAttribute(LOGIN_VALIDATE_CODE));
+        //System.out.println(request.getSession().getId());
         try{
             loginValidateCode = request.getSession().getAttribute(LOGIN_VALIDATE_CODE).toString();
         }catch (NullPointerException e){
@@ -82,4 +97,34 @@ public class LoginController {
         }
         return map;
     }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/checkPhoneLogin")
+    public HashMap<String,Object> checkPhoneLogin(HttpServletRequest request,
+                                             @RequestParam("validateCode")String validateCode,
+                                             @RequestParam("phone")String phone){
+        HashMap<String,Object> map = new HashMap<>();
+        if(request.getSession().getAttribute("identity") != null){
+            map = (HashMap<String,Object>) request.getSession().getAttribute("identity");
+            return map;
+        }
+        String loginValidateCode = "";
+        //System.out.println(request.getSession().getId());
+        try{
+            loginValidateCode = request.getSession().getAttribute(LOGIN_VALIDATE_CODE).toString();
+        }catch (NullPointerException e){
+            map.put("validateStatus",null);//验证码过期
+        }
+        if(loginValidateCode.equals(validateCode)){
+            map.put("validateStatus",true);//验证码正确
+            map.put("loginStatus",true);
+            map.put("phone",phone);
+            //保存登陆凭证map
+            request.getSession().setAttribute("identity",map);
+        }else {
+            map.put("validateStatus",false);//验证码不正确
+        }
+        return map;
+    }
+
 }

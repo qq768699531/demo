@@ -1,12 +1,15 @@
 package com.mxcsystem.demo.util;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.zhenzi.sms.ZhenziSmsClient;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CommonUtil {
     /**
@@ -30,6 +33,8 @@ public class CommonUtil {
         // Set standard HTTP/1.0 no-cache header.
         response.setHeader("Pragma", "no-cache");
 
+        response.setHeader("sessionId",request.getSession().getId());
+
         // return a jpeg
         response.setContentType("image/jpeg");
 
@@ -38,7 +43,7 @@ public class CommonUtil {
 
         // store the text in the session
         request.getSession().setAttribute(validateSessionKey, capText);
-        System.out.println(capText);
+        //System.out.println(request.getSession().getAttribute(validateSessionKey));
 
         // create the image with the text
         BufferedImage bi = captchaProducer.createImage(capText);
@@ -52,6 +57,28 @@ public class CommonUtil {
         } finally {
             out.close();
         }
+    }
+
+    public static void phoneValidateCode(HttpServletRequest request,
+                                         HttpServletResponse response,
+                                         DefaultKaptcha captchaProducer,
+                                         String validateSessionKey,
+                                         String phoneNumber)throws Exception{
+        String verifyCode = captchaProducer.createText();
+        ZhenziSmsClient client = new ZhenziSmsClient(
+                "https://sms_developer.zhenzikj.com/",
+                "107367",
+                "32bc3e2b-c902-4d8d-ae07-3dca14b46875");
+        Map<String,Object> map = new HashMap<>();
+        map.put("number",phoneNumber);
+        map.put("message","您的验证码为："+verifyCode+"，有效时间为5分钟");
+        String result = client.send(map);
+        String balance = client.balance();
+        System.out.println("result = " + result);
+        System.out.println("balance = " + balance);
+
+        request.getSession().setAttribute(validateSessionKey,verifyCode);
+        response.setHeader("sessionId",request.getSession().getId());
     }
 
 }
