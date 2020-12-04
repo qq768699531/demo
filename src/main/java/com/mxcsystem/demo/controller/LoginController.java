@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
 @RestController
@@ -37,13 +38,17 @@ public class LoginController {
     /**
      *
      * @param phone 手机号码
-     * @throws Exception 错误
      */
     @RequestMapping("/sendSMS")
     public void sendSMS(HttpServletRequest request,
                         HttpServletResponse response,
-                        @RequestParam("phone")String phone) throws Exception {
+                        @RequestParam("phone")String phone){
         CommonUtil.phoneValidateCode(request,response,captchaProducer,LOGIN_VALIDATE_CODE,phone);
+    }
+
+    @RequestMapping("/checkSession")
+    public boolean checkSession(HttpServletRequest request) {
+        return request.getSession().isNew();
     }
 
     /**
