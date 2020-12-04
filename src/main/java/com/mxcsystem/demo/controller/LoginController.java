@@ -62,12 +62,12 @@ public class LoginController {
             return map;
         }
         String loginValidateCode = "";
+        //System.out.println(request.getSession().getAttribute(LOGIN_VALIDATE_CODE));
         try{
             loginValidateCode = request.getSession().getAttribute(LOGIN_VALIDATE_CODE).toString();
         }catch (NullPointerException e){
             map.put("validateStatus",null);//验证码过期
         }
-        System.out.println(loginValidateCode);
         if(loginValidateCode.equals(validateCode)){
             map.put("validateStatus",true);//验证码正确
             if(loginService.checkLogin(username, password)){

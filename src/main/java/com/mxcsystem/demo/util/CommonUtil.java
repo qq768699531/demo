@@ -15,7 +15,7 @@ public class CommonUtil {
      * @param response 转成图片
      * @param captchaProducer 生成图片方法类
      * @param validateSessionKey session名称
-     * @throws Exception
+     * @throws Exception 错误
      */
     public static void validateCode(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -38,6 +38,7 @@ public class CommonUtil {
 
         // store the text in the session
         request.getSession().setAttribute(validateSessionKey, capText);
+        System.out.println(capText);
 
         // create the image with the text
         BufferedImage bi = captchaProducer.createImage(capText);
