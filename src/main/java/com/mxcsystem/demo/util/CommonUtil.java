@@ -63,7 +63,7 @@ public class CommonUtil {
                                          HttpServletResponse response,
                                          DefaultKaptcha captchaProducer,
                                          String validateSessionKey,
-                                         String phoneNumber)throws Exception{
+                                         String phoneNumber){
         String verifyCode = captchaProducer.createText();
         ZhenziSmsClient client = new ZhenziSmsClient(
                 "https://sms_developer.zhenzikj.com/",
@@ -72,8 +72,15 @@ public class CommonUtil {
         Map<String,Object> map = new HashMap<>();
         map.put("number",phoneNumber);
         map.put("message","您的验证码为："+verifyCode+"，有效时间为5分钟");
-        String result = client.send(map);
-        String balance = client.balance();
+        String result = "";
+        String balance = "";
+        try {
+            result = client.send(map);
+            balance = client.balance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         System.out.println("result = " + result);
         System.out.println("balance = " + balance);
 
