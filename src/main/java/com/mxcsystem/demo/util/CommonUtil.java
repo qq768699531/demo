@@ -70,8 +70,10 @@ public class CommonUtil {
                 "107367",
                 "32bc3e2b-c902-4d8d-ae07-3dca14b46875");
         Map<String,Object> map = new HashMap<>();
+
         map.put("number",phoneNumber);
-        map.put("message","您的验证码为："+verifyCode+"，有效时间为5分钟");
+        map.put("templateId","2587");
+        map.put("templateParams", new String[]{verifyCode, "5分钟"});
         String result = "";
         String balance = "";
         try {
@@ -86,6 +88,8 @@ public class CommonUtil {
 
         request.getSession().setAttribute(validateSessionKey,verifyCode);
         response.setHeader("sessionId",request.getSession().getId());
+
+        System.out.println(verifyCode);
     }
 
 }
