@@ -67,7 +67,7 @@ public class LoginController {
         }catch (NullPointerException e){
             map.put("validateStatus",null);//验证码过期
         }
-
+        System.out.println(loginValidateCode);
         if(loginValidateCode.equals(validateCode)){
             map.put("validateStatus",true);//验证码正确
             if(loginService.checkLogin(username, password)){
