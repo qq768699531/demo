@@ -48,7 +48,7 @@ public class LoginController {
 
     @RequestMapping("/checkSession")
     public boolean checkSession(HttpServletRequest request) {
-        return request.getSession().isNew();
+        return !request.getSession().isNew();
     }
 
     /**
