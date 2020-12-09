@@ -19,4 +19,9 @@ public class ApplyController {
     public int createNewApply(Apply apply){
         return applyService.createNewApply(apply);
     }
+
+    @RequestMapping(value = "/applyerOwnerUpdate",method = RequestMethod.POST)
+    public int applyerOwnerUpdate(Apply apply){
+        return applyService.updateApplyByApplyerOwner(apply);
+    }
 }

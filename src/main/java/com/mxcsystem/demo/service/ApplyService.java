@@ -16,7 +16,15 @@ public class ApplyService {
      * @return 返回审批id
      */
     public int createNewApply(Apply apply){
-        applyMapper.createNewApply(apply)
+        applyMapper.createNewApply(apply);
         return apply.getID();
+    }
+
+    public int updateApplyByApplyerOwner(Apply apply){
+        return applyMapper.updateApplyByApplyerOwner(apply);
+    }
+
+    public int updateApplyByApplyerManager(Apply apply){
+        return applyMapper.updateApplyByApplyerManager(apply);
     }
 }
