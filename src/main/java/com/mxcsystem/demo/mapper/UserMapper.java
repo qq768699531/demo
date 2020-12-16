@@ -11,5 +11,4 @@ public interface UserMapper {
 
     @Select("select * from user where PhoneNum = #{PhoneNum}")
     User getUserInfo(String PhoneNum);
-
 }

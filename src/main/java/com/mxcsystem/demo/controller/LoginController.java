@@ -52,7 +52,6 @@ public class LoginController {
 
     /**
      * 检查验证码是否正确
-     * @param validateCode 验证码
      */
     @RequestMapping("/checkLoginValidateCode")
     public HashMap<String,Object> checkLoginValidateCode(HttpServletRequest request,
@@ -69,7 +68,6 @@ public class LoginController {
         map.put("code",200);
         return map;
     }
-
 
     @SuppressWarnings("unchecked")
     @RequestMapping("/checkLogin")

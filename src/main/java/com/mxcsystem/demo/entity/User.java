@@ -73,9 +73,4 @@ public class User {
     public void setHobby (String hobby) {
         this.hobby = hobby;
     }
-
-    public  User(String Username,String PhoneNum){
-        this.Username = Username;
-        this.PhoneNum = PhoneNum;
-    }
 }

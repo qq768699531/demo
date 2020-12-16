@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class CommonUtil {
     /**
-     * 生成验证码图片 - 不存在该功能，已经弃用
+     * 生成验证码图片
      * @param request 设置session
      * @param response 转成图片
      * @param captchaProducer 生成图片方法类
@@ -59,15 +59,6 @@ public class CommonUtil {
         }
     }
 
-    /**
-     * 生成一个验证码
-     * @author qjc
-     * @param request
-     * @param response
-     * @param captchaProducer
-     * @param validateSessionKey
-     * @param phoneNumber
-     */
     public static void phoneValidateCode(HttpServletRequest request,
                                          HttpServletResponse response,
                                          DefaultKaptcha captchaProducer,
@@ -98,7 +89,7 @@ public class CommonUtil {
         request.getSession().setAttribute(validateSessionKey,verifyCode);
         response.setHeader("sessionId",request.getSession().getId());
 
-        System.out.println("verifyCode = " + verifyCode);
+        System.out.println(verifyCode);
     }
 
 }
