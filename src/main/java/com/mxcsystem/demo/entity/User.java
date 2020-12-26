@@ -10,6 +10,10 @@ public class User {
     private String Email;
     private String hobby;
 
+    public User (String substring, String substring1) {
+
+    }
+
     public String getPhoneNum () {
         return PhoneNum;
     }
