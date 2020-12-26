@@ -15,7 +15,7 @@ import java.util.regex.*;
 public class MyStringUtil {
     /**
      * match the @xxxx(123456548) string from disscussion and return a Set<User>  eg:@周圆(1302354684687)
-     * @param str
+     * @param str 字符串
      * @return Set<User>
      */
     public static  Set<User> matchAt(String str){
@@ -40,7 +40,9 @@ public class MyStringUtil {
             String nextNum = inner.split("\\(")[1].substring(0,inner.split("\\(")[1].length()-1);
 
             System.out.println(preName+" "+nextNum);
-            userSet.add(new User(preName.substring(1,preName.length()-1),nextNum.substring(0,nextNum.length()-1)));
+            userSet.add(
+                    new User(preName.substring(1,preName.length()-1),
+                    nextNum.substring(0,nextNum.length()-1)));
         }
 
 //        for(String i:resultset) {
