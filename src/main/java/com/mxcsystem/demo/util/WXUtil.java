@@ -1,6 +1,6 @@
 package com.mxcsystem.demo.util;
 
-import com.mxcsystem.demo.entity.WX.SystemConstant;
+import com.mxcsystem.demo.constant.SystemConstant;
 import com.mxcsystem.demo.entity.WX.WXMessage;
 import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;

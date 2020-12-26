@@ -1,10 +1,10 @@
-package com.mxcsystem.demo.entity.WX;
+package com.mxcsystem.demo.constant;
 
 public class SystemConstant {
     /**
      * 用户appid
      */
-    public static String  APP_ID = "";
+    public static String  APP_ID = "wx3885819508628467";
 
     /**
      *密码
