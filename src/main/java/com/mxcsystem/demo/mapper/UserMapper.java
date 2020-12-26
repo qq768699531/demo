@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface UserMapper {
 
     @Select("select * from user where PhoneNum = #{PhoneNum}")
-    User getUserInfo(String PhoneNum);
+    User getUserInfo(User user);
 }

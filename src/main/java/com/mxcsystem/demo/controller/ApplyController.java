@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -37,21 +36,25 @@ public class ApplyController {
         return applyService.submitApplyByApplyerOwner(apply.getID());
     }
 
+    //查询分配给我的
     @RequestMapping(value = "/getApplyListAssignToMe",method = RequestMethod.GET)
     public List<Apply> getApplyListAssignToMe(User user){
         return applyService.getApplyListAssignToMe(user);
     }
 
+    //查询我的活动
     @RequestMapping(value = "/getApplyListCreateByMe",method = RequestMethod.GET)
     public List<Apply> getApplyListCreateByMe(User user){
         return applyService.getApplyListCreateByMe(user);
     }
 
+    //查询我关注的
     @RequestMapping(value = "/getFollowList",method = RequestMethod.GET)
     public List<Follow> getFollowList(User user){
         return applyService.getFollowList(user);
     }
 
+    //查询我提及的
     @RequestMapping(value = "/getMentionList",method = RequestMethod.GET)
     public List<Mention> getMentionList(User user){
         return applyService.getMentionList(user);

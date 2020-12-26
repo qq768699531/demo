@@ -10,7 +10,7 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public User getUserInfo(String PhoneNum){
-        return userMapper.getUserInfo(PhoneNum);
+    public User getUserInfo(User user){
+        return userMapper.getUserInfo(user);
     }
 }

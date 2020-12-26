@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("user/set")
-    public User getUserInfo(HttpServletRequest request,String PhoneNum){
-        return userService.getUserInfo(PhoneNum);
+    @RequestMapping("/info")
+    public User getUserInfo(User user){
+        return userService.getUserInfo(user);
     }
 }
