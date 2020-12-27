@@ -5,12 +5,14 @@ import com.mxcsystem.demo.entity.Follow;
 import com.mxcsystem.demo.entity.Mention;
 import com.mxcsystem.demo.entity.User;
 import com.mxcsystem.demo.service.ApplyService;
+import com.mxcsystem.demo.util.MyStringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/apply")
@@ -18,16 +20,38 @@ public class ApplyController {
     @Autowired
     private ApplyService applyService;
 
+    private void insertMentionFromApply(Apply apply){
+        String statement = apply.getMissionStatement();
+        Set<User> userSet = MyStringUtil.matchAt(statement);
+        Mention mention = new Mention();
+        mention.setID(apply.getID());
+        mention.setStatus(1);
+        for (User user:userSet) {
+            mention.setPhoneNum(user.getPhoneNum());
+            mention.setTitle(user.getUsername());
+            mention.setAssignTo(user.getPhoneNum());
+            if(applyService.getMentionListByMention(mention).size() == 0){
+                applyService.insertMention(mention);
+            }
+        }
+    }
+
     //用户创建新审批
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     public int createNewApply(Apply apply){
-        return applyService.createNewApply(apply);
+        int result = applyService.createNewApply(apply);
+        applyService.deleteMentionsByApplyID(apply);
+        insertMentionFromApply(apply);
+        return result;
     }
 
-    //用户修改未提交的审批
+    //用户修改未提交的审批,相当于保存草稿
     @RequestMapping(value = "/applyerOwnerUpdate",method = RequestMethod.POST)
     public int applyerOwnerUpdate(Apply apply){
-        return applyService.updateApplyByApplyerOwner(apply);
+        int result = applyService.updateApplyByApplyerOwner(apply);
+        applyService.deleteMentionsByApplyID(apply);
+        insertMentionFromApply(apply);
+        return result;
     }
 
     //用户提交审批,0为提交失败

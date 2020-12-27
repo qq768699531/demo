@@ -2,9 +2,9 @@ package com.mxcsystem.demo.constant;
 
 public class SystemConstant {
     /**
-     * 用户appid
+     * 用户appId
      */
-    public static String  APP_ID = "wx3885819508628467";
+    public static String APP_ID = "wx3885819508628467";
 
     /**
      *密码

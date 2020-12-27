@@ -1,6 +1,20 @@
 package com.mxcsystem.demo.entity;
 
-public class Apply extends WorkItem{
+import com.mxcsystem.demo.mapper.DiscussionMapper;
+import com.mxcsystem.demo.mapper.LinkMapper;
+import com.mxcsystem.demo.mapper.MentionMapper;
+import com.mxcsystem.demo.util.SpringUtil;
+
+import java.util.List;
+
+public class Apply extends WorkItem {
+    private MentionMapper mentionMapper =
+            (MentionMapper) SpringUtil.applicationContext.getBean("mentionMapper");
+    private DiscussionMapper discussionMapper =
+            (DiscussionMapper) SpringUtil.applicationContext.getBean("discussionMapper");
+    private LinkMapper linkMapper =
+            (LinkMapper) SpringUtil.applicationContext.getBean("linkMapper");
+
     private String Reason;
     private String MissionStatement;
     private String Analysis;
@@ -13,6 +27,37 @@ public class Apply extends WorkItem{
     private String ApplyerManagerNote;
     private String ApplicationType;
     private String ApplicationAmount;
+
+    private List<Mention> mentionList;
+    private List<Discussion> discussionList;
+    private List<Link> linkList;
+
+    public List<Mention> getMentionList () {
+        mentionList = mentionMapper.getMentionListByApplyID(this);
+        return mentionList;
+    }
+
+    public void setMentionList (List<Mention> mentionList) {
+        this.mentionList = mentionList;
+    }
+
+    public List<Discussion> getDiscussionList () {
+        discussionList = discussionMapper.getDiscussionListByApplyID(this);
+        return discussionList;
+    }
+
+    public void setDiscussionList (List<Discussion> discussionList) {
+        this.discussionList = discussionList;
+    }
+
+    public List<Link> getLinkList () {
+        linkList = linkMapper.getLinkListByApplyID(this);
+        return linkList;
+    }
+
+    public void setLinkList (List<Link> linkList) {
+        this.linkList = linkList;
+    }
 
     public String getReason () {
         return Reason;

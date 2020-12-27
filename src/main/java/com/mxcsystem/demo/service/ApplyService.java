@@ -66,4 +66,16 @@ public class ApplyService {
     public List<Apply> getApplyListCreateByMe (User user) {
         return applyMapper.getApplyListCreateByMe(user);
     }
+
+    public int insertMention(Mention mention){
+        return mentionMapper.insertMention(mention);
+    }
+
+    public int deleteMentionsByApplyID(Apply apply){
+        return mentionMapper.deleteMentionsByApplyID(apply);
+    }
+
+    public List<Mention> getMentionListByMention(Mention mention){
+        return mentionMapper.getMentionListByMention(mention);
+    }
 }

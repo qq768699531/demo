@@ -12,12 +12,12 @@ import java.util.List;
 public interface ApplyMapper {
     //用户创建新的审批
     @Insert("insert into apply " +
-            "(Title,Departments,CreatedBy,CreatedDate,AssignedTo,Status,History" +
+            "(Title,Departments,CreatedBy,CreatedDate,AssignedTo,Status,History," +
             "Reason,MissionStatement,Analysis,Attachments,CorrectiveActionPlan," +
             "Applyer,ApplicationType,ApplicationAmount) " +
             "values" +
-            "(#{Title},#{Departments},#{CreatedBy},#{CreatedDate},#{AssignedTo},1,1" +
-            "#{Reason},${MissionStatement},#{Analysis},#{Attachments},#{CorrectiveActionPlan}," +
+            "(#{Title},#{Departments},#{CreatedBy},NOW(),#{AssignedTo},1,1," +
+            "#{Reason},#{MissionStatement},#{Analysis},#{Attachments},#{CorrectiveActionPlan}," +
             "#{Applyer},#{ApplicationType},#{ApplicationAmount})")
     @Options(useGeneratedKeys = true, keyProperty = "ID", keyColumn = "ID")
     void createNewApply(Apply apply);
@@ -42,7 +42,7 @@ public interface ApplyMapper {
     @Update("update apply set " +
             "History = CONCAT(#{History},'|2')," +
             "Status = 2," +
-            "ActivatedDate = #{ActivatedDate}," +
+            "ActivatedDate = NOW()," +
             "ActivatedBy = #{ActivatedBy} " +
             "where " +
             "ID = #{ID}")
@@ -53,7 +53,7 @@ public interface ApplyMapper {
             "History = CONCAT(#{History},'|3')," +
             "ApplyerOwner = #{ApplyerOwner}," +
             "ApplyerOwnerNote = #{ApplyerOwnerNote}," +
-            "ResolvedDate = #{ResolvedDate}," +
+            "ResolvedDate = NOW()," +
             "ResolvedBy = #{ResolvedBy} " +
             "where " +
             "ID = #{ID}")
@@ -80,14 +80,14 @@ public interface ApplyMapper {
     List<Apply> getApplyListLargerThanStatus(int Status);
 
     //按照用户手机号码查询审批列表
-    @Select("select * from apply where CreatedBy = #{phoneNum}")
+    @Select("select * from apply where CreatedBy = #{PhoneNum}")
     List<Apply> getApplyListByUserID (String phoneNum);
 
     //按照分配给我的查询审批列表
-    @Select("select * from apply where AssignedTo = #{phoneNum}")
+    @Select("select * from apply where AssignedTo = #{PhoneNum}")
     List<Apply> getApplyListAssignToMe (User user);
 
     //按照分配给我的查询审批列表
-    @Select("select * from apply where CreatedBy = #{phoneNum}")
+    @Select("select * from apply where CreatedBy = #{PhoneNum}")
     List<Apply> getApplyListCreateByMe (User user);
 }

@@ -1,19 +1,19 @@
 package com.mxcsystem.demo.entity;
 
 public class Mention {
-    int phoneNum;
+    String PhoneNum;
     int ID;
     int WorkItemType;
-    String status;
-    String title;
-    String assignTo;
+    int Status;
+    String Title;
+    String AssignTo;
 
-    public int getPhoneNum () {
-        return phoneNum;
+    public String getPhoneNum () {
+        return PhoneNum;
     }
 
-    public void setPhoneNum (int phoneNum) {
-        this.phoneNum = phoneNum;
+    public void setPhoneNum (String phoneNum) {
+        PhoneNum = phoneNum;
     }
 
     public int getID () {
@@ -32,27 +32,27 @@ public class Mention {
         WorkItemType = workItemType;
     }
 
-    public String getStatus () {
-        return status;
+    public int getStatus () {
+        return Status;
     }
 
-    public void setStatus (String status) {
-        this.status = status;
+    public void setStatus (int status) {
+        Status = status;
     }
 
     public String getTitle () {
-        return title;
+        return Title;
     }
 
     public void setTitle (String title) {
-        this.title = title;
+        Title = title;
     }
 
     public String getAssignTo () {
-        return assignTo;
+        return AssignTo;
     }
 
     public void setAssignTo (String assignTo) {
-        this.assignTo = assignTo;
+        AssignTo = assignTo;
     }
 }
