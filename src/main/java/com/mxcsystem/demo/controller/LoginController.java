@@ -1,7 +1,9 @@
 package com.mxcsystem.demo.controller;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.mxcsystem.demo.entity.User;
 import com.mxcsystem.demo.service.LoginService;
+import com.mxcsystem.demo.service.UserService;
 import com.mxcsystem.demo.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,8 @@ import java.util.HashMap;
 public class LoginController {
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private UserService userService;
     @Resource
     private DefaultKaptcha captchaProducer;
     /**
@@ -123,6 +127,9 @@ public class LoginController {
             map.put("validateStatus",true);//验证码正确
             map.put("loginStatus",true);
             map.put("phone",phone);
+            User user = new User;
+            user.setPhoneNum(phone);
+            map.put("user",userService.getUserInfo(user));
             //保存登陆凭证map
             request.getSession().setAttribute("identity",map);
         }else {

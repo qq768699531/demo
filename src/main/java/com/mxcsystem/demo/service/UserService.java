@@ -23,4 +23,8 @@ public class UserService {
     public List<User> getGroupManager (User user) {
         return userMapper.getGroupManager(user);
     }
+
+    public String getUserOpenID(User user){
+        return userMapper.getUserOpenID(user);
+    }
 }

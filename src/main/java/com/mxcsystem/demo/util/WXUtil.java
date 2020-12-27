@@ -1,11 +1,14 @@
 package com.mxcsystem.demo.util;
 
 import com.mxcsystem.demo.constant.SystemConstant;
+import com.mxcsystem.demo.entity.Apply;
+import com.mxcsystem.demo.entity.User;
 import com.mxcsystem.demo.entity.WX.WXMessage;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
+import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 
@@ -34,7 +37,25 @@ public class WXUtil {
         return null;
     }
 
-    public static void sendApproveMsg(WXMessage entity){
+    public static String getOpenID(WXMessage entity){
+        WxMpInMemoryConfigStorage wxStorage = new WxMpInMemoryConfigStorage();
+
+        wxStorage.setAppId(SystemConstant.APP_ID);
+        wxStorage.setSecret(SystemConstant.APP_SECRET);
+
+        WxMpService wxMpService = new WxMpServiceImpl();
+        wxMpService.setWxMpConfigStorage(wxStorage);
+        try {
+            WxMpOAuth2AccessToken token = wxMpService.oauth2getAccessToken(entity.getCode());
+            System.out.println(token.getOpenId());
+            return token.getOpenId();
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void sendApproveMsg(WXMessage wxMessage){
         WxMpInMemoryConfigStorage wxStorage = new WxMpInMemoryConfigStorage();
 
         wxStorage.setAppId(SystemConstant.APP_ID);
@@ -58,18 +79,16 @@ public class WXUtil {
 
         List<WxMpTemplateData> wxMpTemplateData = new ArrayList<>();
 
-        wxMpTemplateData.add(new WxMpTemplateData("通知", "你被@了", color));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String startTime = sdf.format(new Date());
-        //下面的keyword1对应模板上的位置
-        wxMpTemplateData.add(new WxMpTemplateData("keyword1", startTime, color));
-        wxMpTemplateData.add(new WxMpTemplateData("keyword2", entity.getQuestion(), color));
-        wxMpTemplateData.add(new WxMpTemplateData("keyword3", entity.getAnswer(), color));
+        wxMpTemplateData.add(new WxMpTemplateData("thing1", wxMessage.getTitle(), color));
+        wxMpTemplateData.add(new WxMpTemplateData("name2", wxMessage.getAssignTo(), color));
+        wxMpTemplateData.add(new WxMpTemplateData("thing3", wxMessage.getThing(), color));
+        wxMpTemplateData.add(new WxMpTemplateData("name4", wxMessage.getApplyer(), color));
+        wxMpTemplateData.add(new WxMpTemplateData("date5", wxMessage.getDate(), color));
         // wxMpTemplateData.add(new WxMpTemplateData("remark", "领航磐石产品部", color));
         templateMessage.setData(wxMpTemplateData);
         try {
             //要推送的用户openid
-            templateMessage.setToUser(entity.getOpenid());
+            templateMessage.setToUser(wxMessage.getOpenid());
             wxMpService.getTemplateMsgService().sendTemplateMsg(templateMessage);
         } catch (Exception e) {
             //System.out.println("推送失败：" + e.getMessage());

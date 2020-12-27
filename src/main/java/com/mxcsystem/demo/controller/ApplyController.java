@@ -6,6 +6,7 @@ import com.mxcsystem.demo.entity.Mention;
 import com.mxcsystem.demo.entity.User;
 import com.mxcsystem.demo.entity.WX.WXMessage;
 import com.mxcsystem.demo.service.ApplyService;
+import com.mxcsystem.demo.service.UserService;
 import com.mxcsystem.demo.util.MyStringUtil;
 import com.mxcsystem.demo.util.WXUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import java.util.Set;
 public class ApplyController {
     @Autowired
     private ApplyService applyService;
+    @Autowired
+    private UserService userService;
 
     private void insertMentionFromApply(Apply apply){
         Set<User> userSet = MyStringUtil.matchAt(apply.getMissionStatement());
@@ -39,7 +42,21 @@ public class ApplyController {
 
     private void sendMsgToUserByApply(Apply apply){
         Set<User> userSet = MyStringUtil.matchAt(apply.getMissionStatement());
-
+        for (User user:userSet) {
+            String openid = userService.getUserOpenID(user);
+            if(openid != null){
+                WXMessage wxMessage = new WXMessage();
+                wxMessage.setOpenid(openid);
+                wxMessage.setTitle(apply.getTitle());
+                wxMessage.setApplyer(apply.getApplyer());
+                wxMessage.setAssignTo(apply.getAssignedTo());
+                wxMessage.setThing(apply.getMissionStatement());
+                wxMessage.setDate(apply.getActivatedDate());
+                WXUtil.sendApproveMsg(wxMessage);
+            }else{
+                System.out.println("用户" + user.getPhoneNum() + "的openid为空");
+            }
+        }
     }
 
     //用户创建新审批,返回ApplyID为成功,0为失败

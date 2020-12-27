@@ -1,17 +1,61 @@
 package com.mxcsystem.demo.entity.WX;
 
 public class WXMessage {
-    private String id;
+    private String code;
     private String openid;
-    private String question;
-    private String answer;
 
-    public String getId () {
-        return id;
+    private String title;
+    private String assignTo;
+    private String thing;
+    private String applyer;
+    private String date;
+
+    public String getTitle () {
+        return title;
     }
 
-    public void setId (String id) {
-        this.id = id;
+    public void setTitle (String title) {
+        this.title = title;
+    }
+
+    public String getAssignTo () {
+        return assignTo;
+    }
+
+    public void setAssignTo (String assignTo) {
+        this.assignTo = assignTo;
+    }
+
+    public String getThing () {
+        return thing;
+    }
+
+    public void setThing (String thing) {
+        this.thing = thing;
+    }
+
+    public String getApplyer () {
+        return applyer;
+    }
+
+    public void setApplyer (String applyer) {
+        this.applyer = applyer;
+    }
+
+    public String getDate () {
+        return date;
+    }
+
+    public void setDate (String date) {
+        this.date = date;
+    }
+
+    public String getCode () {
+        return code;
+    }
+
+    public void setCode (String code) {
+        this.code = code;
     }
 
     public String getOpenid () {
@@ -20,21 +64,5 @@ public class WXMessage {
 
     public void setOpenid (String openid) {
         this.openid = openid;
-    }
-
-    public String getQuestion () {
-        return question;
-    }
-
-    public void setQuestion (String question) {
-        this.question = question;
-    }
-
-    public String getAnswer () {
-        return answer;
-    }
-
-    public void setAnswer (String answer) {
-        this.answer = answer;
     }
 }

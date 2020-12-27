@@ -9,10 +9,10 @@ public class SystemConstant {
     /**
      *密码
      */
-    public static String APP_SECRET = "";
+    public static String APP_SECRET = "4f50cc0218bc5ef18860e77da7898357";
 
     /**
      * 模板的id
      */
-    public static String MSG_TEMPLATE_ID = "WUcHsDGMuFuZygOBmbCRtvghaPw67BfMWkzpNPo1pm0";
+    public static String MSG_TEMPLATE_ID = "P_62zQzZtPCpN77CrTO1q1O5UsaovNg6EHR8_s7jFBA";
 }
