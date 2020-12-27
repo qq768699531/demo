@@ -1,98 +1,98 @@
 package com.mxcsystem.demo.util;
 
+import cn.binarywang.wx.miniapp.api.WxMaMsgService;
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
+import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
+import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
+import com.alibaba.fastjson.JSONObject;
 import com.mxcsystem.demo.constant.SystemConstant;
-import com.mxcsystem.demo.entity.Apply;
-import com.mxcsystem.demo.entity.User;
 import com.mxcsystem.demo.entity.WX.WXMessage;
 import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
-import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
-import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
-import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
-import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class WXUtil {
-    public static String getAccessToken(){
-        WxMpInMemoryConfigStorage wxStorage = new WxMpInMemoryConfigStorage();
+    private WxMaMsgService msgService;
 
-        wxStorage.setAppId(SystemConstant.APP_ID);
+    public String getAccessToken () throws WxErrorException {
+        WxMaDefaultConfigImpl wxStorage = new WxMaDefaultConfigImpl();
+
+        wxStorage.setAppid(SystemConstant.APP_ID);
         wxStorage.setSecret(SystemConstant.APP_SECRET);
 
-        WxMpService wxMpService = new WxMpServiceImpl();
-        wxMpService.setWxMpConfigStorage(wxStorage);
+        WxMaService wxMaService = new WxMaServiceImpl();
+        wxMaService.setWxMaConfig(wxStorage);
 
-        try {
-            String token = wxMpService.getAccessToken();
-            System.out.println(token);
-            return token;
-        } catch (WxErrorException e) {
-            e.printStackTrace();
-        }
-        return null;
+        msgService = wxMaService.getMsgService();
+
+        String token = wxMaService.getAccessToken();
+        System.out.println(token);
+        return token;
     }
 
-    public static String getOpenID(WXMessage entity){
-        WxMpInMemoryConfigStorage wxStorage = new WxMpInMemoryConfigStorage();
-
-        wxStorage.setAppId(SystemConstant.APP_ID);
-        wxStorage.setSecret(SystemConstant.APP_SECRET);
-
-        WxMpService wxMpService = new WxMpServiceImpl();
-        wxMpService.setWxMpConfigStorage(wxStorage);
+    public String getOpenID (WXMessage wxMessage) {
+        CloseableHttpClient client = HttpClients.createDefault();
+        String url =
+                String.format("https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
+                        SystemConstant.APP_ID, SystemConstant.APP_SECRET, wxMessage.getCode());
+        HttpGet request = new HttpGet(url);
         try {
-            WxMpOAuth2AccessToken token = wxMpService.oauth2getAccessToken(entity.getCode());
-            System.out.println(token.getOpenId());
-            return token.getOpenId();
-        } catch (WxErrorException e) {
+            HttpResponse response = client.execute(request);
+            //请求发送成功，并得到响应
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                //读取服务器返回过来的json字符串数据
+                String strResult = EntityUtils.toString(response.getEntity());
+                //把json字符串转换成json对象
+                JSONObject jsonResult = (JSONObject) JSONObject.parse(strResult);
+                System.out.println(jsonResult.getString("openid"));
+                return jsonResult.getString("openid");
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
 
-    public static void sendApproveMsg(WXMessage wxMessage){
-        WxMpInMemoryConfigStorage wxStorage = new WxMpInMemoryConfigStorage();
+    /**
+     * description: 发送订阅消息
+     * param: openId 用户的openid
+     * param: templateId 模板id
+     * param: dataParam 参数内容
+     */
+    public void sendSubscribeMsg(String openId, String templateId, List<WxMaSubscribeMessage.Data> dataParam) throws WxErrorException {
 
-        wxStorage.setAppId(SystemConstant.APP_ID);
-        wxStorage.setSecret(SystemConstant.APP_SECRET);
+        // 3.8.0版本使用的使用WxMaSubscribeMessage
+        WxMaSubscribeMessage.WxMaSubscribeMessageBuilder builder = WxMaSubscribeMessage.builder();
 
-        WxMpService wxMpService = new WxMpServiceImpl();
-        wxMpService.setWxMpConfigStorage(wxStorage);
+        builder.toUser(openId);//推送消息的目标对象openId
+        builder.templateId(templateId); //这里填写的就是在后台申请添加的模板ID
+        builder.data(dataParam);//添加请求参数
+        WxMaSubscribeMessage msg = builder.build();
+        msgService.sendSubscribeMsg(msg);
+    }
 
-        String color = "#000000";//黑色
-        //color = "#001EFF";蓝色
-        //color = "#FF0000";红色
-        //color = "#FFFF00";黄色
+    public void sendSubscribeMsg (WXMessage wxMessage) throws WxErrorException {
+        List<WxMaSubscribeMessage.Data> dataParam = new ArrayList<>();
+        dataParam.add(new WxMaSubscribeMessage.Data("thing1",wxMessage.getTitle()));
+        dataParam.add(new WxMaSubscribeMessage.Data("name2", wxMessage.getAssignTo()));
+        dataParam.add(new WxMaSubscribeMessage.Data("thing3", wxMessage.getThing()));
+        dataParam.add(new WxMaSubscribeMessage.Data("name4", wxMessage.getApplyer()));
+        dataParam.add(new WxMaSubscribeMessage.Data("date5", wxMessage.getDate()));
+        WxMaSubscribeMessage.WxMaSubscribeMessageBuilder builder = WxMaSubscribeMessage.builder();
 
-        //2-推送消息
-        WxMpTemplateMessage templateMessage = new WxMpTemplateMessage();
-        templateMessage.setTemplateId(SystemConstant.MSG_TEMPLATE_ID);
-
-        //点击模版消息要访问的网址，注释掉之后就不会有点击跳转
-        //String alarmPath ="https://wx.navimentum.com/demos/qa/shangbaoDetail.html?openid="+entity.getOpenid()+"&&id="+entity.getId();
-        //templateMessage.setUrl(alarmPath);
-
-        List<WxMpTemplateData> wxMpTemplateData = new ArrayList<>();
-
-        wxMpTemplateData.add(new WxMpTemplateData("thing1", wxMessage.getTitle(), color));
-        wxMpTemplateData.add(new WxMpTemplateData("name2", wxMessage.getAssignTo(), color));
-        wxMpTemplateData.add(new WxMpTemplateData("thing3", wxMessage.getThing(), color));
-        wxMpTemplateData.add(new WxMpTemplateData("name4", wxMessage.getApplyer(), color));
-        wxMpTemplateData.add(new WxMpTemplateData("date5", wxMessage.getDate(), color));
-        // wxMpTemplateData.add(new WxMpTemplateData("remark", "领航磐石产品部", color));
-        templateMessage.setData(wxMpTemplateData);
-        try {
-            //要推送的用户openid
-            templateMessage.setToUser(wxMessage.getOpenid());
-            wxMpService.getTemplateMsgService().sendTemplateMsg(templateMessage);
-        } catch (Exception e) {
-            //System.out.println("推送失败：" + e.getMessage());
-            e.printStackTrace();
-        }
+        builder.toUser(wxMessage.getOpenid());//推送消息的目标对象openId
+        builder.templateId(SystemConstant.MSG_TEMPLATE_ID); //这里填写的就是在后台申请添加的模板ID
+        builder.data(dataParam);//添加请求参数
+        WxMaSubscribeMessage msg = builder.build();
+        msgService.sendSubscribeMsg(msg);
     }
 }

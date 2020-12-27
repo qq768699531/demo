@@ -127,7 +127,7 @@ public class LoginController {
             map.put("validateStatus",true);//验证码正确
             map.put("loginStatus",true);
             map.put("phone",phone);
-            User user = new User;
+            User user = new User();
             user.setPhoneNum(phone);
             map.put("user",userService.getUserInfo(user));
             //保存登陆凭证map
@@ -137,5 +137,4 @@ public class LoginController {
         }
         return map;
     }
-
 }

@@ -15,6 +15,10 @@ public class User {
         this.PhoneNum = PhoneNum;
     }
 
+    public User () {
+
+    }
+
     public String getPhoneNum () {
         return PhoneNum;
     }

@@ -9,6 +9,7 @@ import com.mxcsystem.demo.service.ApplyService;
 import com.mxcsystem.demo.service.UserService;
 import com.mxcsystem.demo.util.MyStringUtil;
 import com.mxcsystem.demo.util.WXUtil;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,7 +53,12 @@ public class ApplyController {
                 wxMessage.setAssignTo(apply.getAssignedTo());
                 wxMessage.setThing(apply.getMissionStatement());
                 wxMessage.setDate(apply.getActivatedDate());
-                WXUtil.sendApproveMsg(wxMessage);
+                WXUtil wxUtil = new WXUtil();
+                try {
+                    wxUtil.sendSubscribeMsg(wxMessage);
+                } catch (WxErrorException e) {
+                    e.printStackTrace();
+                }
             }else{
                 System.out.println("用户" + user.getPhoneNum() + "的openid为空");
             }
