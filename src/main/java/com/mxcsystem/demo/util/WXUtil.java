@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 public class WXUtil {
-    public static void getAccessToken(){
+    public static String getAccessToken(){
         WxMpInMemoryConfigStorage wxStorage = new WxMpInMemoryConfigStorage();
 
         wxStorage.setAppId(SystemConstant.APP_ID);
@@ -27,9 +27,11 @@ public class WXUtil {
         try {
             String token = wxMpService.getAccessToken();
             System.out.println(token);
+            return token;
         } catch (WxErrorException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public static void sendApproveMsg(WXMessage entity){

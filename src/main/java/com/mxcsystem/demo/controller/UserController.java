@@ -24,7 +24,7 @@ public class UserController {
         return userService.getGroupMember(user);
     }
 
-    @RequestMapping("/getGroupMember")
+    @RequestMapping("/getGroupManager")
     public List<User> getGroupManager(User user){
         return userService.getGroupManager(user);
     }
