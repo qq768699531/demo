@@ -32,12 +32,11 @@ public interface ApplyMapper {
             "Attachments = #{Attachments}," +
             "CorrectiveActionPlan = #{CorrectiveActionPlan} " +
             "where " +
-            "ID = #{ID} and " +
-            "Status = 1")
+            "ID = #{ID} and Status = 1")
     int updateApplyWhileNotSubmit(Apply apply);
 
     @Delete("delete from apply where ID = #{ID} and Status = 1")
-    int deleteApplyWhileNotSubmit(int ID);
+    int deleteApplyWhileNotSubmit(Apply apply);
 
     @Update("update apply set " +
             "History = CONCAT(#{History},'|2')," +

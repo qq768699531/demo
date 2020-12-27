@@ -3,6 +3,7 @@ package com.mxcsystem.demo.mapper;
 import com.mxcsystem.demo.entity.Apply;
 import com.mxcsystem.demo.entity.Discussion;
 import com.mxcsystem.demo.entity.Log;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,10 @@ public interface DiscussionMapper {
 
     @Select("select * from discussion where ID = #{ID} and WorkItemType = 1")
     List<Discussion> getDiscussionListByLogID (Log log);
+
+    @Delete("delete from discussion where ID = #{ID} and WorkItemType = 0")
+    int deleteDiscussionsByApplyID (Apply apply);
+
+    @Delete("delete from discussion where ID = #{ID} and WorkItemType = 1")
+    int deleteDiscussionsByLogID (Log log);
 }

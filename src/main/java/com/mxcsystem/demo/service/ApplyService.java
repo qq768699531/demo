@@ -4,9 +4,7 @@ import com.mxcsystem.demo.entity.Apply;
 import com.mxcsystem.demo.entity.Follow;
 import com.mxcsystem.demo.entity.Mention;
 import com.mxcsystem.demo.entity.User;
-import com.mxcsystem.demo.mapper.ApplyMapper;
-import com.mxcsystem.demo.mapper.FollowMapper;
-import com.mxcsystem.demo.mapper.MentionMapper;
+import com.mxcsystem.demo.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +18,10 @@ public class ApplyService {
     private FollowMapper followMapper;
     @Autowired
     private MentionMapper mentionMapper;
+    @Autowired
+    private LinkMapper linkMapper;
+    @Autowired
+    private DiscussionMapper discussionMapper;
 
     /**
      *
@@ -29,6 +31,10 @@ public class ApplyService {
     public int createNewApply(Apply apply){
         applyMapper.createNewApply(apply);
         return apply.getID();
+    }
+
+    public int updateApplyWhileNotSubmit(Apply apply){
+        return applyMapper.updateApplyWhileNotSubmit(apply);
     }
 
     public int updateApplyByApplyerOwner(Apply apply){
@@ -75,7 +81,21 @@ public class ApplyService {
         return mentionMapper.deleteMentionsByApplyID(apply);
     }
 
+    public int deleteLinksByApplyID (Apply apply) {
+        return linkMapper.deleteLinksByApplyID(apply);
+    }
+
+    public int deleteDiscussionsByApplyID(Apply apply){
+        return discussionMapper.deleteDiscussionsByApplyID(apply);
+    }
+
     public List<Mention> getMentionListByMention(Mention mention){
         return mentionMapper.getMentionListByMention(mention);
     }
+
+    public int deleteApplyWhileNotSubmit (Apply apply) {
+        return applyMapper.deleteApplyWhileNotSubmit(apply);
+    }
+
+
 }

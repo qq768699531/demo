@@ -4,8 +4,10 @@ import com.mxcsystem.demo.entity.Apply;
 import com.mxcsystem.demo.entity.Follow;
 import com.mxcsystem.demo.entity.Mention;
 import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.WX.WXMessage;
 import com.mxcsystem.demo.service.ApplyService;
 import com.mxcsystem.demo.util.MyStringUtil;
+import com.mxcsystem.demo.util.WXUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,8 +23,7 @@ public class ApplyController {
     private ApplyService applyService;
 
     private void insertMentionFromApply(Apply apply){
-        String statement = apply.getMissionStatement();
-        Set<User> userSet = MyStringUtil.matchAt(statement);
+        Set<User> userSet = MyStringUtil.matchAt(apply.getMissionStatement());
         Mention mention = new Mention();
         mention.setID(apply.getID());
         mention.setStatus(1);
@@ -36,28 +37,47 @@ public class ApplyController {
         }
     }
 
-    //用户创建新审批
-    @RequestMapping(value = "/create",method = RequestMethod.POST)
+    private void sendMsgToUserByApply(Apply apply){
+        Set<User> userSet = MyStringUtil.matchAt(apply.getMissionStatement());
+
+    }
+
+    //用户创建新审批,返回ApplyID为成功,0为失败
+    @RequestMapping(value = "/createNewApply",method = RequestMethod.POST)
     public int createNewApply(Apply apply){
-        int result = applyService.createNewApply(apply);
+        return applyService.createNewApply(apply);
+    }
+
+    //用户修改未提交的审批,1为成功,0为失败
+    @RequestMapping(value = "/updateApplyWhileNotSubmit",method = RequestMethod.POST)
+    public int updateApplyWhileNotSubmit(Apply apply){
+        int result = applyService.updateApplyWhileNotSubmit(apply);
         applyService.deleteMentionsByApplyID(apply);
+        applyService.deleteLinksByApplyID(apply);
         insertMentionFromApply(apply);
         return result;
     }
 
-    //用户修改未提交的审批,相当于保存草稿
-    @RequestMapping(value = "/applyerOwnerUpdate",method = RequestMethod.POST)
-    public int applyerOwnerUpdate(Apply apply){
-        int result = applyService.updateApplyByApplyerOwner(apply);
+    //用户删除未提交的审批,1为成功,0为失败
+    @RequestMapping(value = "/deleteApplyWhileNotSubmit",method = RequestMethod.GET)
+    public int deleteApplyWhileNotSubmit(Apply apply){
         applyService.deleteMentionsByApplyID(apply);
-        insertMentionFromApply(apply);
-        return result;
+        applyService.deleteLinksByApplyID(apply);
+        applyService.deleteDiscussionsByApplyID(apply);
+        return applyService.deleteApplyWhileNotSubmit(apply);
     }
 
     //用户提交审批,0为提交失败
     @RequestMapping(value = "/applyerSubmitApply",method = RequestMethod.POST)
     public int applyerSubmitApply(Apply apply){
+        sendMsgToUserByApply(apply);
         return applyService.submitApplyByApplyerOwner(apply.getID());
+    }
+
+    //用户主管修改审批状况
+    @RequestMapping(value = "/applyerOwnerUpdate",method = RequestMethod.POST)
+    public int applyerOwnerUpdate(Apply apply){
+        return applyService.updateApplyByApplyerOwner(apply);
     }
 
     //查询分配给我的

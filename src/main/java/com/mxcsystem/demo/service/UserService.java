@@ -5,6 +5,8 @@ import com.mxcsystem.demo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     @Autowired
@@ -12,5 +14,13 @@ public class UserService {
 
     public User getUserInfo(User user){
         return userMapper.getUserInfo(user);
+    }
+
+    public List<User> getGroupMember (User user) {
+        return userMapper.getGroupMember(user);
+    }
+
+    public List<User> getGroupManager (User user) {
+        return userMapper.getGroupManager(user);
     }
 }

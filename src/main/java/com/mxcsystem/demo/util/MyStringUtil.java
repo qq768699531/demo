@@ -30,19 +30,15 @@ public class MyStringUtil {
 //            System.out.println(arr[0]+" "+arr[1]);
 //            users.add(new User(arr[0],arr[1]));
 //        }
-        Pattern pattern = Pattern.compile("@[^x00-xf]+\\([0-9]+\\)");
+        Pattern pattern = Pattern.compile("@([^x00-xf]|[a-zA-Z])+\\([0-9]+\\)");
         Matcher matcher = pattern.matcher(str);
         Set<User> userSet = new HashSet<>();
         while(matcher.find()) {
             String inner = matcher.group();
             String preName = inner.split("\\(")[0].substring(1);
             String nextNum = inner.split("\\(")[1].substring(0,inner.split("\\(")[1].length()-1);
-            //System.out.println(preName+" "+nextNum);
             userSet.add(new User(preName,nextNum));
         }
-//        for(String i:resultset) {
-//            System.out.println(i);
-//        }
         return userSet;
     }
 }
