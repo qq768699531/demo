@@ -129,9 +129,9 @@ public class LoginController {
 
             User user = new User("未知用户",phone);
             user.setIsManager(0);
+            map.put("user",user);
             userService.insertUser(user);
 
-            map.put("user",user);
             //保存登陆凭证map
             request.getSession().setAttribute("identity",map);
         }else {

@@ -4,11 +4,17 @@ import com.mxcsystem.demo.entity.Apply;
 import com.mxcsystem.demo.entity.Follow;
 import com.mxcsystem.demo.entity.Mention;
 import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.WX.WXMessage;
 import com.mxcsystem.demo.mapper.*;
+import com.mxcsystem.demo.util.MyStringUtil;
+import com.mxcsystem.demo.util.WXUtil;
+import me.chanjar.weixin.common.error.WxErrorException;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ApplyService {
@@ -22,6 +28,8 @@ public class ApplyService {
     private LinkMapper linkMapper;
     @Autowired
     private DiscussionMapper discussionMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      *
@@ -53,7 +61,7 @@ public class ApplyService {
         if(user.getIsManager() == 1){
             return applyMapper.getApplyListLargerThanStatus(1);
         }else{
-            return applyMapper.getApplyListByUserID(user.getPhoneNum());
+            return applyMapper.getApplyListByPhoneNum(user.getPhoneNum());
         }
     }
 
@@ -97,5 +105,61 @@ public class ApplyService {
         return applyMapper.deleteApplyWhileNotSubmit(apply);
     }
 
+    public void insertMentionFromApply (Apply apply){
+        Set<User> userSet = MyStringUtil.matchAt(apply.getMissionStatement());
+        Mention mention = new Mention();
+        mention.setID(apply.getID());
+        mention.setStatus(1);
+        for (User user:userSet) {
+            mention.setPhoneNum(user.getPhoneNum());
+            mention.setTitle(user.getUsername());
+            mention.setAssignTo(user.getPhoneNum());
+            if(getMentionListByMention(mention).size() == 0){
+                insertMention(mention);
+            }
+        }
+    }
 
+    public void insertLinkFromApply(Apply apply){
+
+    }
+
+    public void insertFollowFromApplyAndUser(Apply apply,User user){
+        Follow follow = new Follow();
+        follow.setID(apply.getID());
+        follow.setAssignTo(apply.getAssignedTo());
+        follow.setPhoneNum(user.getPhoneNum());
+        follow.setStatus(apply.getStatus());
+        follow.setTitle(apply.getTitle());
+        follow.setWorkItemType(0);
+        insertFollow(follow);
+    }
+
+    public void insertFollow (Follow follow) {
+        followMapper.insertFollow(follow);
+    }
+
+    public void sendMentionMsgToUserByApply (Apply apply){
+        Set<User> userSet = MyStringUtil.matchAt(apply.getMissionStatement());
+        for (User user:userSet) {
+            String openid = userMapper.getUserOpenID(user);
+            if(openid != null){
+                WXMessage wxMessage = new WXMessage();
+                wxMessage.setOpenid(openid);
+                wxMessage.setTitle(apply.getTitle());
+                wxMessage.setApplyer(apply.getApplyer());
+                wxMessage.setAssignTo(apply.getAssignedTo());
+                wxMessage.setThing(apply.getMissionStatement());
+                wxMessage.setDate(apply.getActivatedDate());
+                WXUtil wxUtil = new WXUtil();
+                try {
+                    wxUtil.sendSubscribeMsg(wxMessage);
+                } catch (WxErrorException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                System.out.println("用户" + user.getPhoneNum() + "的openid为空");
+            }
+        }
+    }
 }

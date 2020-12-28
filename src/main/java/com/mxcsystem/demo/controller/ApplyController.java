@@ -26,44 +26,7 @@ public class ApplyController {
     @Autowired
     private UserService userService;
 
-    private void insertMentionFromApply(Apply apply){
-        Set<User> userSet = MyStringUtil.matchAt(apply.getMissionStatement());
-        Mention mention = new Mention();
-        mention.setID(apply.getID());
-        mention.setStatus(1);
-        for (User user:userSet) {
-            mention.setPhoneNum(user.getPhoneNum());
-            mention.setTitle(user.getUsername());
-            mention.setAssignTo(user.getPhoneNum());
-            if(applyService.getMentionListByMention(mention).size() == 0){
-                applyService.insertMention(mention);
-            }
-        }
-    }
 
-    private void sendMsgToUserByApply(Apply apply){
-        Set<User> userSet = MyStringUtil.matchAt(apply.getMissionStatement());
-        for (User user:userSet) {
-            String openid = userService.getUserOpenID(user);
-            if(openid != null){
-                WXMessage wxMessage = new WXMessage();
-                wxMessage.setOpenid(openid);
-                wxMessage.setTitle(apply.getTitle());
-                wxMessage.setApplyer(apply.getApplyer());
-                wxMessage.setAssignTo(apply.getAssignedTo());
-                wxMessage.setThing(apply.getMissionStatement());
-                wxMessage.setDate(apply.getActivatedDate());
-                WXUtil wxUtil = new WXUtil();
-                try {
-                    wxUtil.sendSubscribeMsg(wxMessage);
-                } catch (WxErrorException e) {
-                    e.printStackTrace();
-                }
-            }else{
-                System.out.println("用户" + user.getPhoneNum() + "的openid为空");
-            }
-        }
-    }
 
     //用户创建新审批,返回ApplyID为成功,0为失败
     @RequestMapping(value = "/createNewApply",method = RequestMethod.POST)
@@ -77,7 +40,7 @@ public class ApplyController {
         int result = applyService.updateApplyWhileNotSubmit(apply);
         applyService.deleteMentionsByApplyID(apply);
         applyService.deleteLinksByApplyID(apply);
-        insertMentionFromApply(apply);
+        applyService.insertMentionFromApply(apply);
         return result;
     }
 
@@ -93,7 +56,7 @@ public class ApplyController {
     //用户提交审批,0为提交失败
     @RequestMapping(value = "/applyerSubmitApply",method = RequestMethod.POST)
     public int applyerSubmitApply(Apply apply){
-        sendMsgToUserByApply(apply);
+        applyService.sendMentionMsgToUserByApply(apply);
         return applyService.submitApplyByApplyerOwner(apply.getID());
     }
 

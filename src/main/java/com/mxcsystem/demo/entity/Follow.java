@@ -1,18 +1,18 @@
 package com.mxcsystem.demo.entity;
 
 public class Follow {
-    int phoneNum;
+    String phoneNum;
     int ID;
     int WorkItemType;
     String status;
     String title;
     String assignTo;
 
-    public int getPhoneNum () {
+    public String getPhoneNum () {
         return phoneNum;
     }
 
-    public void setPhoneNum (int phoneNum) {
+    public void setPhoneNum (String phoneNum) {
         this.phoneNum = phoneNum;
     }
 

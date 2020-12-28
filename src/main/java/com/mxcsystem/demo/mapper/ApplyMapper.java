@@ -80,7 +80,7 @@ public interface ApplyMapper {
 
     //按照用户手机号码查询审批列表
     @Select("select * from apply where CreatedBy = #{PhoneNum}")
-    List<Apply> getApplyListByUserID (String phoneNum);
+    List<Apply> getApplyListByPhoneNum (String phoneNum);
 
     //按照分配给我的查询审批列表
     @Select("select * from apply where AssignedTo = #{PhoneNum}")
