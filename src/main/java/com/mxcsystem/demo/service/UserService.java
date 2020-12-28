@@ -27,4 +27,20 @@ public class UserService {
     public String getUserOpenID(User user){
         return userMapper.getUserOpenID(user);
     }
+
+    public int insertIntoOpenID (String openid, String phoneNum) {
+        User user = new User();
+        user.setPhoneNum(phoneNum);
+        if(userMapper.getUserOpenID(user) == null){
+            return userMapper.insertOpenID(openid,phoneNum);
+        }else{
+            return userMapper.updateOpenID(openid,phoneNum);
+        }
+    }
+
+    public void insertUser (User user) {
+        if(userMapper.getUserInfo(user) == null){
+            userMapper.insertUser(user);
+        }
+    }
 }

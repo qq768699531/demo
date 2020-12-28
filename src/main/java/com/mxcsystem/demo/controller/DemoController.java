@@ -2,6 +2,7 @@ package com.mxcsystem.demo.controller;
 
 import com.mxcsystem.demo.entity.WX.WXMessage;
 import com.mxcsystem.demo.mapper.UserMapper;
+import com.mxcsystem.demo.service.UserService;
 import com.mxcsystem.demo.util.WXUtil;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class DemoController {
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
     @RequestMapping("test")
     @ResponseBody
     public String Test(){
@@ -40,17 +41,27 @@ public class DemoController {
 
     @RequestMapping("/saveOpenID")
     @ResponseBody
-    public String getOpenID(String code){
+    public String getOpenID(String code,String phoneNum){
         //System.out.println(code);
         WXMessage wxMessage = new WXMessage();
         wxMessage.setCode(code);
         WXUtil wxUtil = new WXUtil();
-        return wxUtil.getOpenID(wxMessage);
+        String openid = wxUtil.getOpenID(wxMessage);
+        userService.insertIntoOpenID(openid,phoneNum);
+        return openid;
     }
 
     @RequestMapping("/sendMsg")
     @ResponseBody
-    public String sendMsg(){
-        return "false";
+    public String sendMsg(WXMessage wxMessage){
+        WXUtil wxUtil = new WXUtil();
+        wxUtil.setMsgService();
+        try {
+            wxUtil.sendSubscribeMsg(wxMessage);
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+            return "false";
+        }
+        return "true";
     }
 }

@@ -126,10 +126,12 @@ public class LoginController {
         if(loginValidateCode.equals(validateCode)){
             map.put("validateStatus",true);//验证码正确
             map.put("loginStatus",true);
-            map.put("phone",phone);
-            User user = new User();
-            user.setPhoneNum(phone);
-            map.put("user",userService.getUserInfo(user));
+
+            User user = new User("未知用户",phone);
+            user.setIsManager(0);
+            userService.insertUser(user);
+
+            map.put("user",user);
             //保存登陆凭证map
             request.getSession().setAttribute("identity",map);
         }else {

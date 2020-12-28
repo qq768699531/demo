@@ -1,8 +1,10 @@
 package com.mxcsystem.demo.mapper;
 
 import com.mxcsystem.demo.entity.User;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,4 +27,17 @@ public interface UserMapper {
     //如果用户登陆过，获取用户的openid
     @Select("select openid from openid where PhoneNum = #{PhoneNum}")
     String getUserOpenID(User user);
+
+    @Insert("insert into openid values(#{openid},#{phoneNum})")
+    int insertOpenID (String openid, String phoneNum);
+
+    @Update("update openid set OpenID = #{openid} where PhoneNum = #{phoneNum}")
+    int updateOpenID (String openid, String phoneNum);
+
+    @Insert("insert into user values(#{PhoneNum},#{Username},#{GroupID},#{isManager}," +
+            "#{QQ},#{Weixin},#{Email},#{Hobby})")
+    void insertUser(User user);
+
+
+
 }

@@ -32,13 +32,26 @@ public class WXUtil {
         WxMaService wxMaService = new WxMaServiceImpl();
         wxMaService.setWxMaConfig(wxStorage);
 
-        msgService = wxMaService.getMsgService();
-
-        String token = wxMaService.getAccessToken();
-        System.out.println(token);
-        return token;
+        return wxMaService.getAccessToken();
     }
 
+    public void setMsgService(){
+        WxMaDefaultConfigImpl wxStorage = new WxMaDefaultConfigImpl();
+
+        wxStorage.setAppid(SystemConstant.APP_ID);
+        wxStorage.setSecret(SystemConstant.APP_SECRET);
+
+        WxMaService wxMaService = new WxMaServiceImpl();
+        wxMaService.setWxMaConfig(wxStorage);
+
+        msgService = wxMaService.getMsgService();
+    }
+
+    /**
+     *
+     * @param wxMessage code
+     * @return openid
+     */
     public String getOpenID (WXMessage wxMessage) {
         CloseableHttpClient client = HttpClients.createDefault();
         String url =

@@ -8,7 +8,7 @@ public class User {
     private String QQ;
     private String Weixin;
     private String Email;
-    private String hobby;
+    private String Hobby;
 
     public User (String Username, String PhoneNum) {
         this.Username = Username;
@@ -76,10 +76,10 @@ public class User {
     }
 
     public String getHobby () {
-        return hobby;
+        return Hobby;
     }
 
-    public void setHobby (String hobby) {
-        this.hobby = hobby;
+    public void setHobby (String Hobby) {
+        this.Hobby = Hobby;
     }
 }
