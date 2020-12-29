@@ -2,22 +2,19 @@ package com.mxcsystem.demo.entity;
 
 import com.mxcsystem.demo.mapper.DiscussionMapper;
 import com.mxcsystem.demo.mapper.LinkMapper;
-import com.mxcsystem.demo.mapper.LogMapper;
 import com.mxcsystem.demo.mapper.MentionMapper;
 import com.mxcsystem.demo.util.SpringUtil;
 
 import java.util.List;
 
 public class Log extends WorkItem {
-    private LogMapper logMapper =
-            (LogMapper) SpringUtil.applicationContext.getBean("logMapper");
     private MentionMapper mentionMapper =
             (MentionMapper) SpringUtil.applicationContext.getBean("mentionMapper");
     private DiscussionMapper discussionMapper =
             (DiscussionMapper) SpringUtil.applicationContext.getBean("discussionMapper");
     private LinkMapper linkMapper =
             (LinkMapper) SpringUtil.applicationContext.getBean("linkMapper");
-    private String Attachment;
+    private String Attachments;
     private String LogDate;
     private String Record;
     private String Defect;
@@ -46,7 +43,7 @@ public class Log extends WorkItem {
     }
 
     public List<Link> getLinkList () {
-        linkList = linkMapper.getLinkListByLogID(this);
+        linkList = linkMapper.getLogLinkListByLogID(this);
         return linkList;
     }
 
@@ -62,12 +59,12 @@ public class Log extends WorkItem {
         CorrectiveActionPlan = correctiveActionPlan;
     }
 
-    public String getAttachment () {
-        return Attachment;
+    public String getAttachments () {
+        return Attachments;
     }
 
-    public void setAttachment (String attachment) {
-        Attachment = attachment;
+    public void setAttachments (String attachments) {
+        Attachments = attachments;
     }
 
     public String getLogDate () {

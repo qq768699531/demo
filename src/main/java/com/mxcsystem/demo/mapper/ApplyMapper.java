@@ -23,7 +23,7 @@ public interface ApplyMapper {
     void createNewApply(Apply apply);
 
     @Update("update apply set " +
-            "History = CONCAT(#{History},'|1')," +
+            "History = CONCAT('1|',History)," +
             "Departments = #{Departments}," +
             "Title = #{Title}," +
             "Reason = #{Reason}," +
@@ -39,7 +39,7 @@ public interface ApplyMapper {
     int deleteApplyWhileNotSubmit(Apply apply);
 
     @Update("update apply set " +
-            "History = CONCAT(#{History},'|2')," +
+            "History = CONCAT('2|',History)," +
             "Status = 2," +
             "ActivatedDate = NOW()," +
             "ActivatedBy = #{ActivatedBy} " +
@@ -49,7 +49,7 @@ public interface ApplyMapper {
 
     @Update("update apply set " +
             "Status = 3," +
-            "History = CONCAT(#{History},'|3')," +
+            "History = CONCAT('3|',History)," +
             "ApplyerOwner = #{ApplyerOwner}," +
             "ApplyerOwnerNote = #{ApplyerOwnerNote}," +
             "ResolvedDate = NOW()," +
@@ -61,7 +61,7 @@ public interface ApplyMapper {
     //废案
     @Update("update apply set " +
             "Status = 4," +
-            "History = CONCAT(#{History},'|4')," +
+            "History = CONCAT('4|',History)," +
             "ApplyerManager = #{ApplyerManager}," +
             "ApplyerManagerNote = #{ApplyerManagerNote}," +
             "FinishDate = NOW()" +

@@ -1,19 +1,38 @@
 package com.mxcsystem.demo.service;
 
-import com.mxcsystem.demo.entity.Log;
-import com.mxcsystem.demo.entity.User;
-import com.mxcsystem.demo.mapper.LogMapper;
+import com.mxcsystem.demo.entity.*;
+import com.mxcsystem.demo.mapper.*;
+import com.mxcsystem.demo.util.MyStringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class LogService {
     @Autowired
     private LogMapper logMapper;
+    @Autowired
+    private FollowMapper followMapper;
+    @Autowired
+    private MentionMapper mentionMapper;
+    @Autowired
+    private LinkMapper linkMapper;
+    @Autowired
+    private DiscussionMapper discussionMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     public int createNewLog(Log log){
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        if(log.getStatus() >= 1) log.setCreatedDate(df.format(new Date()));
+        if(log.getStatus() >= 2) log.setActivatedDate(df.format(new Date()));
+        if(log.getStatus() >= 3) log.setResolvedDate(df.format(new Date()));
+        if(log.getStatus() >= 4) log.setClosedDate(df.format(new Date()));
         return logMapper.createNewLog(log);
     }
 
@@ -37,4 +56,52 @@ public class LogService {
         return logMapper.getLogListByPhoneNum(user.getPhoneNum());
     }
 
+    public int updateLogStatusByLogID(Log log){
+        return logMapper.updateLogStatusByLogID(log);
+    }
+
+    public void insertMentionsFromLog (Log log) {
+        Set<User> userSet = MyStringUtil.getMentionUsers(log.getRecord());
+        Mention mention = new Mention();
+        mention.setID(log.getID());
+        mention.setStatus(1);
+        for (User user:userSet) {
+            mention.setPhoneNum(user.getPhoneNum());
+            mention.setTitle(user.getUsername());
+            mention.setAssignTo(user.getPhoneNum());
+            if(mentionMapper.getMentionListByMention(mention).size() == 0){
+                mentionMapper.insertMention(mention);
+            }
+        }
+    }
+
+    public void insertLinksFromLog (Log log) {
+        Set<Link> linkSet = MyStringUtil.getLinkItems(log.getRecord());
+        for(Link link:linkSet){
+            link.setID(log.getID());
+            link.setWorkItemType(1);
+            if(linkMapper.getLinkListByLink(link).size() == 0){
+                linkMapper.insertLink(link);
+            }
+        }
+    }
+
+    public int insertFollowFromLog (Log log, User user) {
+        Follow follow = new Follow();
+        follow.setID(log.getID());
+        follow.setAssignTo(log.getAssignedTo());
+        follow.setPhoneNum(user.getPhoneNum());
+        follow.setStatus(log.getStatus());
+        follow.setTitle(log.getTitle());
+        follow.setWorkItemType(0);
+        return followMapper.insertFollow(follow);
+    }
+
+    public int deleteMentionsByLogID (Log log) {
+        return mentionMapper.deleteMentionsByLogID(log);
+    }
+
+    public int deleteLinksByLogID (Log log) {
+        return linkMapper.deleteLogLinksByLogID(log);
+    }
 }

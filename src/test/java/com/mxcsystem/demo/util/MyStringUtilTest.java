@@ -5,11 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MyStringUtilTest {
 
@@ -25,6 +21,6 @@ class MyStringUtilTest {
 
     @Test
     void matchAt() {
-        Set<User> result = MyStringUtil.matchAt("@周扬(1189051464)今天@周扬(1189051464)没有吃@周扬(1189051464)@周！在想 | @劝劝 ");
+        Set<User> result = MyStringUtil.getMentionUsers("@周扬(1189051464)今天@周扬(1189051464)没有吃@周扬(1189051464)@周！在想 | @劝劝 ");
     }
 }

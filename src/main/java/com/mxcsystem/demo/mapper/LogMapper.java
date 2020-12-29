@@ -10,16 +10,18 @@ import java.util.List;
 @Repository
 public interface LogMapper {
     @Insert("insert into log " +
-            "(Title,Departments,CreatedBy,CreatedDate,AssignedTo,Status," +
-            "LogDate,Record,Defect,Attachments) " +
+            "(Title,Departments,AssignedTo,Status," +
+            "LogDate,Record,Defect,Attachments,History," +
+            "CreatedBy,CreatedDate,ActivatedDate,ActivatedBy,ClosedDate,ClosedBy,ResolvedDate,ResolvedBy) " +
             "values" +
-            "(#{Title},#{Departments},#{CreatedBy},#{CreateDate},#{AssignedTo},1," +
-            "NOW(),#{Record},#{Defect},#{Attachments})")
+            "(#{Title},#{Departments},#{AssignedTo},#{Status}," +
+            "NOW(),#{Record},#{Defect},#{Attachments},#{Status}," +
+            "#{CreatedBy},#{CreatedDate},#{ActivatedDate},#{ActivatedBy},#{ClosedDate},#{ClosedBy},#{ResolvedDate},#{ResolvedBy})")
     @Options(useGeneratedKeys = true, keyProperty = "ID")
     int createNewLog(Log log);
 
     @Update("update log set " +
-            "History = CONCAT(#{History},'|1')," +
+            "History = CONCAT('1|',History)," +
             "Departments = #{Departments}," +
             "Title = #{Title}," +
             "Record = #{Record}," +
@@ -34,7 +36,7 @@ public interface LogMapper {
     int deleteLogWhileNotSubmit(Log log);
 
     @Update("update log set " +
-            "History = CONCAT(#{History},'|2')," +
+            "History = CONCAT('2|',History)," +
             "Status = 2," +
             "ActivatedDate = NOW()," +
             "ActivatedBy = #{ActivatedBy} " +
@@ -47,4 +49,10 @@ public interface LogMapper {
     //按照用户手机号码查询日志列表
     @Select("select * from log where CreatedBy = #{PhoneNum}")
     List<Log> getLogListByPhoneNum (String phoneNum);
+
+    @Update("update log set Status = #{Status}," +
+            "History = CONCAT(#{Status},'|',History) " +
+            "where ID = #{ID}")
+    int updateLogStatusByLogID(Log log);
+
 }

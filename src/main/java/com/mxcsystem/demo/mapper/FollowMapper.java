@@ -2,9 +2,7 @@ package com.mxcsystem.demo.mapper;
 
 import com.mxcsystem.demo.entity.Follow;
 import com.mxcsystem.demo.entity.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,5 +16,11 @@ public interface FollowMapper {
     List<Follow> getFollowListByPhoneNumber(User user);
 
     @Insert("insert into follow values (#{PhoneNum},#{ID},#{WorkItemType},#{Status},#{Title},#{AssignTo})")
-    void insertFollow (Follow follow);
+    int insertFollow(Follow follow);
+
+    @Delete("delete from follow where ID = #{ID} and WorkItemType = #{WorkItemType}")
+    int deleteFollow(Follow follow);
+
+    @Update("update follow set Status = #{Status} where ID = #{ID} and WorkItemType = #{WorkItemType}")
+    int updateFollowStatus(Follow follow);
 }

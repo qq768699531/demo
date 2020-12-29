@@ -1,15 +1,11 @@
 package com.mxcsystem.demo.service;
 
-import com.mxcsystem.demo.entity.Apply;
-import com.mxcsystem.demo.entity.Follow;
-import com.mxcsystem.demo.entity.Mention;
-import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.*;
 import com.mxcsystem.demo.entity.WX.WXMessage;
 import com.mxcsystem.demo.mapper.*;
 import com.mxcsystem.demo.util.MyStringUtil;
 import com.mxcsystem.demo.util.WXUtil;
 import me.chanjar.weixin.common.error.WxErrorException;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,16 +41,16 @@ public class ApplyService {
         return applyMapper.updateApplyWhileNotSubmit(apply);
     }
 
+    public int submitApplyByApplyer(Apply apply){
+        return applyMapper.submitApply(apply.getID());
+    }
+
     public int updateApplyByApplyerOwner(Apply apply){
         return applyMapper.updateApplyByApplyerOwner(apply);
     }
 
     public int updateApplyByApplyerManager(Apply apply){
         return applyMapper.updateApplyByApplyerManager(apply);
-    }
-
-    public int submitApplyByApplyerOwner(int applyID){
-        return applyMapper.submitApply(applyID);
     }
 
     public List<Apply> getApplyList(User user){
@@ -81,32 +77,24 @@ public class ApplyService {
         return applyMapper.getApplyListCreateByMe(user);
     }
 
-    public int insertMention(Mention mention){
-        return mentionMapper.insertMention(mention);
-    }
-
     public int deleteMentionsByApplyID(Apply apply){
         return mentionMapper.deleteMentionsByApplyID(apply);
     }
 
     public int deleteLinksByApplyID (Apply apply) {
-        return linkMapper.deleteLinksByApplyID(apply);
+        return linkMapper.deleteApplyLinksByApplyID(apply);
     }
 
     public int deleteDiscussionsByApplyID(Apply apply){
         return discussionMapper.deleteDiscussionsByApplyID(apply);
     }
 
-    public List<Mention> getMentionListByMention(Mention mention){
-        return mentionMapper.getMentionListByMention(mention);
-    }
-
     public int deleteApplyWhileNotSubmit (Apply apply) {
         return applyMapper.deleteApplyWhileNotSubmit(apply);
     }
 
-    public void insertMentionFromApply (Apply apply){
-        Set<User> userSet = MyStringUtil.matchAt(apply.getMissionStatement());
+    public void insertMentionsFromApply (Apply apply){
+        Set<User> userSet = MyStringUtil.getMentionUsers(apply.getMissionStatement());
         Mention mention = new Mention();
         mention.setID(apply.getID());
         mention.setStatus(1);
@@ -114,17 +102,24 @@ public class ApplyService {
             mention.setPhoneNum(user.getPhoneNum());
             mention.setTitle(user.getUsername());
             mention.setAssignTo(user.getPhoneNum());
-            if(getMentionListByMention(mention).size() == 0){
-                insertMention(mention);
+            if(mentionMapper.getMentionListByMention(mention).size() == 0){
+                mentionMapper.insertMention(mention);
             }
         }
     }
 
-    public void insertLinkFromApply(Apply apply){
-
+    public void insertLinksFromApply (Apply apply){
+        Set<Link> linkSet = MyStringUtil.getLinkItems(apply.getMissionStatement());
+        for(Link link:linkSet){
+            link.setID(apply.getID());
+            link.setWorkItemType(0);
+            if(linkMapper.getLinkListByLink(link).size() == 0){
+                linkMapper.insertLink(link);
+            }
+        }
     }
 
-    public void insertFollowFromApplyAndUser(Apply apply,User user){
+    public int insertFollowFromApply (Apply apply,User user){
         Follow follow = new Follow();
         follow.setID(apply.getID());
         follow.setAssignTo(apply.getAssignedTo());
@@ -132,15 +127,15 @@ public class ApplyService {
         follow.setStatus(apply.getStatus());
         follow.setTitle(apply.getTitle());
         follow.setWorkItemType(0);
-        insertFollow(follow);
+        return followMapper.insertFollow(follow);
     }
 
-    public void insertFollow (Follow follow) {
-        followMapper.insertFollow(follow);
+    private List<Link> getLinkListByApplyID (Apply apply) {
+        return linkMapper.getApplyLinkListByApplyID(apply);
     }
 
     public void sendMentionMsgToUserByApply (Apply apply){
-        Set<User> userSet = MyStringUtil.matchAt(apply.getMissionStatement());
+        Set<User> userSet = MyStringUtil.getMentionUsers(apply.getMissionStatement());
         for (User user:userSet) {
             String openid = userMapper.getUserOpenID(user);
             if(openid != null){
@@ -161,5 +156,13 @@ public class ApplyService {
                 System.out.println("用户" + user.getPhoneNum() + "的openid为空");
             }
         }
+    }
+
+    public int updateFollowStatus (Follow follow) {
+        return followMapper.updateFollowStatus(follow);
+    }
+
+    public int deleteFollow (Follow follow) {
+        return followMapper.deleteFollow(follow);
     }
 }

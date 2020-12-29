@@ -2,7 +2,7 @@ package com.mxcsystem.demo.entity;
 
 public class WorkItem {
     private int ID;
-
+    private int Status;
     private String Title;
     private String Departments;
     private String CreatedBy;
@@ -11,11 +11,10 @@ public class WorkItem {
     private String ActivatedDate;
     private String ResolvedBy;
     private String ResolvedDate;
-    private String CloseBy;
-    private String CloseDate;
+    private String ClosedBy;
+    private String ClosedDate;
     private String History;
     private String AssignedTo;
-    private String Status;
     private String FinishDate;
 
     public String getFinishDate () {
@@ -98,20 +97,20 @@ public class WorkItem {
         ActivatedBy = activatedBy;
     }
 
-    public String getCloseDate () {
-        return CloseDate;
+    public String getClosedDate () {
+        return ClosedDate;
     }
 
-    public void setCloseDate (String closeDate) {
-        CloseDate = closeDate;
+    public void setClosedDate (String closedDate) {
+        ClosedDate = closedDate;
     }
 
-    public String getCloseBy () {
-        return CloseBy;
+    public String getClosedBy () {
+        return ClosedBy;
     }
 
-    public void setCloseBy (String closeBy) {
-        CloseBy = closeBy;
+    public void setClosedBy (String closedBy) {
+        ClosedBy = closedBy;
     }
 
     public String getHistory () {
@@ -130,11 +129,11 @@ public class WorkItem {
         AssignedTo = assignedTo;
     }
 
-    public String getStatus () {
+    public int getStatus () {
         return Status;
     }
 
-    public void setStatus (String status) {
+    public void setStatus (int status) {
         Status = status;
     }
 }

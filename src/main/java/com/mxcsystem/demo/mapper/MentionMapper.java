@@ -28,7 +28,8 @@ public interface MentionMapper {
     @Select("select * from mention where ID = #{ID} and WorkItemType = 1")
     List<Mention> getMentionListByLogID(Log log);
 
-    @Insert("insert into mention values(#{PhoneNum},#{ID},#{WorkItemType},#{Status},#{Title},#{AssignTo})")
+    @Insert("insert into mention values" +
+            "(#{PhoneNum},#{ID},#{WorkItemType},#{Status},#{Title},#{AssignTo})")
     int insertMention(Mention mention);
 
     @Select("select * from mention where " +
@@ -40,6 +41,9 @@ public interface MentionMapper {
             "AssignTo = #{AssignTo}")
     List<Mention> getMentionListByMention (Mention mention);
 
-    @Delete("delete from mention where ID = #{ID}")
+    @Delete("delete from mention where ID = #{ID} and WorkItemType = 0")
     int deleteMentionsByApplyID (Apply apply);
+
+    @Delete("delete from mention where ID = #{ID} and WorkItemType = 1")
+    int deleteMentionsByLogID (Log log);
 }

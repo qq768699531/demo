@@ -33,8 +33,8 @@ public class Apply extends WorkItem {
     private List<Link> linkList;
 
     public List<Mention> getMentionList () {
-        mentionList = mentionMapper.getMentionListByApplyID(this);
-        return mentionList;
+        List<Mention> mentions = mentionMapper.getMentionListByApplyID(this);
+        return mentions.size()==0?mentionList:mentions;
     }
 
     public void setMentionList (List<Mention> mentionList) {
@@ -42,8 +42,8 @@ public class Apply extends WorkItem {
     }
 
     public List<Discussion> getDiscussionList () {
-        discussionList = discussionMapper.getDiscussionListByApplyID(this);
-        return discussionList;
+        List<Discussion> discussions = discussionMapper.getDiscussionListByApplyID(this);
+        return discussions.size()==0?discussionList:discussions;
     }
 
     public void setDiscussionList (List<Discussion> discussionList) {
@@ -51,8 +51,8 @@ public class Apply extends WorkItem {
     }
 
     public List<Link> getLinkList () {
-        linkList = linkMapper.getLinkListByApplyID(this);
-        return linkList;
+        List<Link> links = linkMapper.getApplyLinkListByApplyID(this);
+        return links.size()==0?linkList:links;
     }
 
     public void setLinkList (List<Link> linkList) {
