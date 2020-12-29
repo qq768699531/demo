@@ -44,30 +44,50 @@ public class LogController {
         return result;
     }
 
+    //删除草稿,返回1为成功,0为失败
+    @RequestMapping(value = "/deleteLogWhileNotSubmit",method = RequestMethod.POST)
+    public int deleteLogWhileNotSubmit(Log log){
+        int result = logService.deleteLogWhileNotSubmit(log);
+        if(result == 1){
+            logService.deleteMentionsByLogID(log);
+            logService.deleteLinksByLogID(log);
+            logService.deleteDiscussionsByLogID(log);
+            logService.deleteAllFollowFromLog(log);
+        }
+        return result;
+    }
+
     //通过日志ID获取日志
     @RequestMapping(value = "/getLogByID",method = RequestMethod.GET)
     public Log getLogByID(Log log){
         return logService.getLogByID(log);
     }
 
-    //删除草稿,返回1为成功,0为失败
-    @RequestMapping(value = "/deleteLogWhileNotSubmit",method = RequestMethod.POST)
-    public int deleteLogWhileNotSubmit(Log log){
-        return logService.deleteLogWhileNotSubmit(log);
-    }
-
     //提交草稿,返回1为成功,0为失败,只需要填写ID,当然填满也没事
     @RequestMapping(value = "/submitLog",method = RequestMethod.POST)
     public int submitLog(Log log){
-        return logService.deleteLogWhileNotSubmit(log);
+        return logService.submitLog(log);
+    }
+
+    //添加关注状态
+    @RequestMapping(value = "/setFollow")
+    public int insertFollowFromLog(Log log, User user){
+        return logService.insertFollowFromLog(log,user);
+    }
+
+    //取消关注状态
+    @RequestMapping(value = "/cancelFollow")
+    public int deleteFollowFromLog(Log log,User user){
+        return logService.deleteFollowFromLog(log,user);
     }
 
     //根据用户手机号码获取日志记录
-    @RequestMapping(value = "/getLogListByPhoneNum",method = RequestMethod.POST)
-    public List<Log> getLogListByPhoneNum(User user){
-        return logService.getLogListByPhoneNum(user);
+    @RequestMapping(value = "/getLogListCreatedByMe",method = RequestMethod.POST)
+    public List<Log> getLogListCreatedByMe(User user){
+        return logService.getLogListCreatedByMe(user);
     }
 
+    //修改日志的状态，仅仅只有状态修改，未完成
     @RequestMapping(value = "/updateLogStatusByLogID",method = RequestMethod.POST)
     public int updateLogStatusByLogID(Log log){
         return logService.updateLogStatusByLogID(log);

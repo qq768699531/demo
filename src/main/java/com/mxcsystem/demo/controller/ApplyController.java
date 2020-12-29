@@ -18,7 +18,13 @@ public class ApplyController {
     @Autowired
     private ApplyService applyService;
 
-    //用户创建新审批,返回ApplyID为成功,0为失败,如果有关注还需要phoneNum
+    /**
+     *
+     * @param apply 需要全面的信息
+     * @param user 如果设置关注，则需要user的PhoneNum
+     * @param isFollow 设置是否关注
+     * @return 返回apply的id
+     */
     @RequestMapping(value = "/createNewApply",method = RequestMethod.POST)
     public int createNewApply(Apply apply,User user,int isFollow){
         int result = applyService.createNewApply(apply);
@@ -32,7 +38,14 @@ public class ApplyController {
         return result;
     }
 
-    //用户修改未提交的审批,1为成功,0为失败
+    /**
+     *
+     * @param apply 可以修改的内容包括
+     *              Departments Title Reason MissionStatement Analysis
+     *              Attachments CorrectiveActionPlan
+     *              需要的条件是ID
+     * @return 0为失败，1为成功
+     */
     @RequestMapping(value = "/updateApplyWhileNotSubmit",method = RequestMethod.POST)
     public int updateApplyWhileNotSubmit(Apply apply){
         int result = applyService.updateApplyWhileNotSubmit(apply);
@@ -46,7 +59,11 @@ public class ApplyController {
         return result;
     }
 
-    //用户删除未提交的审批,1为成功,0为失败
+    /**
+     *
+     * @param apply 只需要ID
+     * @return 0为失败，1为成功
+     */
     @RequestMapping(value = "/deleteApplyWhileNotSubmit",method = RequestMethod.GET)
     public int deleteApplyWhileNotSubmit(Apply apply){
         int result = applyService.deleteApplyWhileNotSubmit(apply);
@@ -54,11 +71,16 @@ public class ApplyController {
             applyService.deleteMentionsByApplyID(apply);
             applyService.deleteLinksByApplyID(apply);
             applyService.deleteDiscussionsByApplyID(apply);
+            applyService.deleteAllFollowFromApply(apply);
         }
         return result;
     }
 
-    //用户提交审批,0为提交失败
+    /**
+     *
+     * @param apply 只需要ID
+     * @return 0为失败，1为成功
+     */
     @RequestMapping(value = "/applyerSubmitApply",method = RequestMethod.POST)
     public int applyerSubmitApply(Apply apply){
         //涉及真机调试不能使用本地地址，所以无法使用推送通知
@@ -66,36 +88,74 @@ public class ApplyController {
         return applyService.submitApplyByApplyer(apply);
     }
 
-    //用户主管修改审批状况
+    /**
+     *
+     * @param apply 需要
+     *              ApplyerOwner ApplyerOwnerNote ResolvedBy ID
+     * @return 0为失败，1为成功
+     */
     @RequestMapping(value = "/applyerOwnerUpdate",method = RequestMethod.POST)
     public int applyerOwnerUpdate(Apply apply){
         return applyService.updateApplyByApplyerOwner(apply);
     }
 
-    @RequestMapping(value = "/updateFollowStatus")
-    public int updateFollowStatus(Follow follow,boolean isFollow){
-        return !isFollow?applyService.deleteFollow(follow):applyService.updateFollowStatus(follow);
+    /**
+     *
+     * @param apply 只需要ID
+     * @param user 只需要PhoneNum
+     * @return 0为失败，1为成功
+     */
+    @RequestMapping(value = "/setFollow")
+    public int insertFollowFromApply(Apply apply,User user){
+        return applyService.insertFollowFromApply(apply,user);
     }
 
-    //查询分配给我的
+    /**
+     *
+     * @param apply 只需要ID
+     * @param user 只需要PhoneNum
+     * @return 0为失败，1为成功
+     */
+    @RequestMapping(value = "/cancelFollow")
+    public int deleteFollowFromApply(Apply apply,User user){
+        return applyService.deleteFollowFromApply(apply,user);
+    }
+
+    /**
+     *
+     * @param user 只需要PhoneNum
+     * @return 0为失败，1为成功
+     */
     @RequestMapping(value = "/getApplyListAssignToMe",method = RequestMethod.GET)
     public List<Apply> getApplyListAssignToMe(User user){
         return applyService.getApplyListAssignToMe(user);
     }
 
-    //查询我的活动
+    /**
+     *
+     * @param user 只需要PhoneNum
+     * @return 0为失败，1为成功
+     */
     @RequestMapping(value = "/getApplyListCreateByMe",method = RequestMethod.GET)
     public List<Apply> getApplyListCreateByMe(User user){
         return applyService.getApplyListCreateByMe(user);
     }
 
-    //查询我关注的
+    /**
+     *
+     * @param user 只需要PhoneNum
+     * @return 0为失败，1为成功
+     */
     @RequestMapping(value = "/getFollowList",method = RequestMethod.GET)
     public List<Follow> getFollowList(User user){
         return applyService.getFollowList(user);
     }
 
-    //查询我提及的
+    /**
+     *
+     * @param user 只需要PhoneNum
+     * @return 0为失败，1为成功
+     */
     @RequestMapping(value = "/getMentionList",method = RequestMethod.GET)
     public List<Mention> getMentionList(User user){
         return applyService.getMentionList(user);

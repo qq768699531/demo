@@ -10,7 +10,6 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ApplyMapper {
-    //用户创建新的审批
     @Insert("insert into apply " +
             "(Title,Departments,CreatedBy,CreatedDate,AssignedTo,Status,History," +
             "Reason,MissionStatement,Analysis,Attachments,CorrectiveActionPlan," +
@@ -31,8 +30,7 @@ public interface ApplyMapper {
             "Analysis = #{Analysis}," +
             "Attachments = #{Attachments}," +
             "CorrectiveActionPlan = #{CorrectiveActionPlan} " +
-            "where " +
-            "ID = #{ID} and Status = 1")
+            "where ID = #{ID} and Status = 1")
     int updateApplyWhileNotSubmit(Apply apply);
 
     @Delete("delete from apply where ID = #{ID} and Status = 1")
@@ -43,8 +41,7 @@ public interface ApplyMapper {
             "Status = 2," +
             "ActivatedDate = NOW()," +
             "ActivatedBy = #{ActivatedBy} " +
-            "where " +
-            "ID = #{ID}")
+            "where ID = #{ID}")
     int submitApply(int ID);
 
     @Update("update apply set " +
@@ -54,8 +51,7 @@ public interface ApplyMapper {
             "ApplyerOwnerNote = #{ApplyerOwnerNote}," +
             "ResolvedDate = NOW()," +
             "ResolvedBy = #{ResolvedBy} " +
-            "where " +
-            "ID = #{ID}")
+            "where ID = #{ID}")
     int updateApplyByApplyerOwner(Apply apply);
 
     //废案
@@ -80,7 +76,7 @@ public interface ApplyMapper {
 
     //按照用户手机号码查询审批列表
     @Select("select * from apply where CreatedBy = #{PhoneNum}")
-    List<Apply> getApplyListByPhoneNum (String phoneNum);
+    List<Apply> getApplyListCreatedByMe (String phoneNum);
 
     //按照分配给我的查询审批列表
     @Select("select * from apply where AssignedTo = #{PhoneNum}")

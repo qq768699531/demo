@@ -1,6 +1,8 @@
 package com.mxcsystem.demo.service;
 
+import com.mxcsystem.demo.entity.Follow;
 import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.mapper.FollowMapper;
 import com.mxcsystem.demo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private FollowMapper followMapper;
 
     public User getUserInfo(User user){
         return userMapper.getUserInfo(user);
@@ -42,5 +46,9 @@ public class UserService {
         if(userMapper.getUserInfo(user) == null){
             userMapper.insertUser(user);
         }
+    }
+
+    public List<Follow> getMyFollow (User user) {
+        return followMapper.getFollowListByPhoneNumber(user);
     }
 }

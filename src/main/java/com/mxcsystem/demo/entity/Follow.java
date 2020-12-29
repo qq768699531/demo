@@ -10,7 +10,7 @@ public class Follow {
     private LogMapper logMapper =
             (LogMapper) SpringUtil.applicationContext.getBean("logMapper");
 
-    String phoneNum;
+    String PhoneNum;
     int ID;
     int WorkItemType;
     int Status;
@@ -18,11 +18,11 @@ public class Follow {
     String AssignTo;
 
     public String getPhoneNum () {
-        return phoneNum;
+        return PhoneNum;
     }
 
     public void setPhoneNum (String phoneNum) {
-        this.phoneNum = phoneNum;
+        this.PhoneNum = phoneNum;
     }
 
     public int getID () {

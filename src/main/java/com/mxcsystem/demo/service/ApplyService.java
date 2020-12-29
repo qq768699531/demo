@@ -57,7 +57,7 @@ public class ApplyService {
         if(user.getIsManager() == 1){
             return applyMapper.getApplyListLargerThanStatus(1);
         }else{
-            return applyMapper.getApplyListByPhoneNum(user.getPhoneNum());
+            return applyMapper.getApplyListCreatedByMe(user.getPhoneNum());
         }
     }
 
@@ -122,12 +122,17 @@ public class ApplyService {
     public int insertFollowFromApply (Apply apply,User user){
         Follow follow = new Follow();
         follow.setID(apply.getID());
-        follow.setAssignTo(apply.getAssignedTo());
-        follow.setPhoneNum(user.getPhoneNum());
-        follow.setStatus(apply.getStatus());
-        follow.setTitle(apply.getTitle());
         follow.setWorkItemType(0);
+        follow.setPhoneNum(user.getPhoneNum());
         return followMapper.insertFollow(follow);
+    }
+
+    public int deleteFollowFromApply (Apply apply, User user) {
+        Follow follow = new Follow();
+        follow.setID(apply.getID());
+        follow.setWorkItemType(0);
+        follow.setPhoneNum(user.getPhoneNum());
+        return followMapper.deleteFollow(follow);
     }
 
     private List<Link> getLinkListByApplyID (Apply apply) {
@@ -158,11 +163,8 @@ public class ApplyService {
         }
     }
 
-    public int updateFollowStatus (Follow follow) {
-        return followMapper.updateFollowStatus(follow);
-    }
 
-    public int deleteFollow (Follow follow) {
-        return followMapper.deleteFollow(follow);
+    public int deleteAllFollowFromApply (Apply apply) {
+        return followMapper.deleteAllFollowFromApply(apply);
     }
 }

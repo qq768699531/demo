@@ -1,5 +1,6 @@
 package com.mxcsystem.demo.controller;
 
+import com.mxcsystem.demo.entity.Follow;
 import com.mxcsystem.demo.entity.User;
 import com.mxcsystem.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,10 @@ public class UserController {
     @RequestMapping("/getGroupManager")
     public List<User> getGroupManager(User user){
         return userService.getGroupManager(user);
+    }
+
+    @RequestMapping("/getMyFollow")
+    public List<Follow> getMyFollow(User user){
+        return userService.getMyFollow(user);
     }
 }

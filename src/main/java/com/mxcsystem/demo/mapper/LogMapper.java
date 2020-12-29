@@ -48,7 +48,7 @@ public interface LogMapper {
 
     //按照用户手机号码查询日志列表
     @Select("select * from log where CreatedBy = #{PhoneNum}")
-    List<Log> getLogListByPhoneNum (String phoneNum);
+    List<Log> getLogListCreatedByMe (String phoneNum);
 
     @Update("update log set Status = #{Status}," +
             "History = CONCAT(#{Status},'|',History) " +

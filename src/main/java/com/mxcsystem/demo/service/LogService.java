@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -24,8 +23,6 @@ public class LogService {
     private LinkMapper linkMapper;
     @Autowired
     private DiscussionMapper discussionMapper;
-    @Autowired
-    private UserMapper userMapper;
 
     public int createNewLog(Log log){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
@@ -52,8 +49,8 @@ public class LogService {
         return logMapper.getLogByID(log.getID());
     }
 
-    public List<Log> getLogListByPhoneNum(User user){
-        return logMapper.getLogListByPhoneNum(user.getPhoneNum());
+    public List<Log> getLogListCreatedByMe (User user){
+        return logMapper.getLogListCreatedByMe(user.getPhoneNum());
     }
 
     public int updateLogStatusByLogID(Log log){
@@ -89,12 +86,17 @@ public class LogService {
     public int insertFollowFromLog (Log log, User user) {
         Follow follow = new Follow();
         follow.setID(log.getID());
-        follow.setAssignTo(log.getAssignedTo());
         follow.setPhoneNum(user.getPhoneNum());
-        follow.setStatus(log.getStatus());
-        follow.setTitle(log.getTitle());
         follow.setWorkItemType(0);
         return followMapper.insertFollow(follow);
+    }
+
+    public int deleteFollowFromLog (Log log, User user) {
+        Follow follow = new Follow();
+        follow.setID(log.getID());
+        follow.setPhoneNum(user.getPhoneNum());
+        follow.setWorkItemType(0);
+        return followMapper.deleteFollow(follow);
     }
 
     public int deleteMentionsByLogID (Log log) {
@@ -103,5 +105,13 @@ public class LogService {
 
     public int deleteLinksByLogID (Log log) {
         return linkMapper.deleteLogLinksByLogID(log);
+    }
+
+    public int deleteDiscussionsByLogID (Log log) {
+        return discussionMapper.deleteDiscussionsByLogID(log);
+    }
+
+    public int deleteAllFollowFromLog (Log log) {
+        return followMapper.deleteAllFollowFromLog(log);
     }
 }
