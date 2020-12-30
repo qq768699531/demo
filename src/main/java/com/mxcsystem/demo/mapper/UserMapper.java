@@ -24,6 +24,9 @@ public interface UserMapper {
     @Select("select * from user where GroupID = #{GroupID} and isManager = 1")
     List<User> getGroupManager (User user);
 
+    @Select("select Username from user")
+    List<String> getUsername();
+
     //如果用户登陆过，获取用户的openid
     @Select("select openid from openid where PhoneNum = #{PhoneNum}")
     String getUserOpenID(User user);

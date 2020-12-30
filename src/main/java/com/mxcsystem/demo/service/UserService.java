@@ -24,6 +24,10 @@ public class UserService {
         return userMapper.getGroupMember(user);
     }
 
+    public List<String> getUsername(){
+        return userMapper.getUsername();
+    }
+
     public List<User> getGroupManager (User user) {
         return userMapper.getGroupManager(user);
     }

@@ -13,11 +13,11 @@ public interface ApplyMapper {
     @Insert("insert into apply " +
             "(Title,Departments,CreatedBy,CreatedDate,AssignedTo,Status,History," +
             "Reason,MissionStatement,Analysis,Attachments,CorrectiveActionPlan," +
-            "Applyer,ApplicationType,ApplicationAmount) " +
+            "Applyer,ApplyerOwner,ApplicationType,ApplicationAmount) " +
             "values" +
-            "(#{Title},#{Departments},#{CreatedBy},NOW(),#{AssignedTo},1,1," +
+            "(#{Title},#{Departments},#{CreatedBy},NOW(),#{AssignedTo},#{Status},#{Status}," +
             "#{Reason},#{MissionStatement},#{Analysis},#{Attachments},#{CorrectiveActionPlan}," +
-            "#{Applyer},#{ApplicationType},#{ApplicationAmount})")
+            "#{Applyer},#{ApplyerOwner},#{ApplicationType},#{ApplicationAmount})")
     @Options(useGeneratedKeys = true, keyProperty = "ID", keyColumn = "ID")
     void createNewApply(Apply apply);
 
