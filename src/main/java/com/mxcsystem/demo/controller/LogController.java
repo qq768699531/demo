@@ -1,5 +1,6 @@
 package com.mxcsystem.demo.controller;
 
+import com.mxcsystem.demo.entity.Apply;
 import com.mxcsystem.demo.entity.Log;
 import com.mxcsystem.demo.entity.User;
 import com.mxcsystem.demo.service.LogService;
@@ -91,5 +92,10 @@ public class LogController {
     @RequestMapping(value = "/updateLogStatusByLogID",method = RequestMethod.POST)
     public int updateLogStatusByLogID(Log log){
         return logService.updateLogStatusByLogID(log);
+    }
+
+    @RequestMapping(value = "/getNewest5Log",method = RequestMethod.GET)
+    public List<Log> getNewest5Log(){
+        return logService.getNewest5Log();
     }
 }

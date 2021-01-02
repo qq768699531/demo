@@ -85,4 +85,7 @@ public interface ApplyMapper {
     //按照分配给我的查询审批列表
     @Select("select * from apply where CreatedBy = #{PhoneNum}")
     List<Apply> getApplyListCreateByMe (User user);
+
+    @Select("select * from apply order by CreatedDate desc limit 5")
+    List<Apply> getNewest5Apply();
 }

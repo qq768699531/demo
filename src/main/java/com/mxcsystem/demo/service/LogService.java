@@ -114,4 +114,8 @@ public class LogService {
     public int deleteAllFollowFromLog (Log log) {
         return followMapper.deleteAllFollowFromLog(log);
     }
+
+    public List<Log> getNewest5Log(){
+        return logMapper.getNewest5Log();
+    }
 }

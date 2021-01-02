@@ -160,4 +160,10 @@ public class ApplyController {
     public List<Mention> getMentionList(User user){
         return applyService.getMentionList(user);
     }
+
+    @RequestMapping(value = "/getNewest5Apply",method = RequestMethod.GET)
+    public List<Apply> getNewest5Apply(){
+        return applyService.getNewest5Apply();
+    }
+
 }

@@ -167,4 +167,8 @@ public class ApplyService {
     public int deleteAllFollowFromApply (Apply apply) {
         return followMapper.deleteAllFollowFromApply(apply);
     }
+
+    public List<Apply> getNewest5Apply(){
+        return applyMapper.getNewest5Apply();
+    }
 }

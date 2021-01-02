@@ -55,4 +55,6 @@ public interface LogMapper {
             "where ID = #{ID}")
     int updateLogStatusByLogID(Log log);
 
+    @Select("select * from log order by CreatedDate desc limit 5")
+    List<Log> getNewest5Log();
 }
