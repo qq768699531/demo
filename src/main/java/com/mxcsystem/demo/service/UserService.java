@@ -1,7 +1,7 @@
 package com.mxcsystem.demo.service;
 
-import com.mxcsystem.demo.entity.Follow;
-import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.base.Follow;
+import com.mxcsystem.demo.entity.base.User;
 import com.mxcsystem.demo.mapper.FollowMapper;
 import com.mxcsystem.demo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;

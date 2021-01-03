@@ -1,6 +1,6 @@
 package com.mxcsystem.demo.mapper;
 
-import com.mxcsystem.demo.entity.Log;
+import com.mxcsystem.demo.entity.base.Log;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 

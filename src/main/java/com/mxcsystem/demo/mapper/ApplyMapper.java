@@ -1,7 +1,7 @@
 package com.mxcsystem.demo.mapper;
 
-import com.mxcsystem.demo.entity.Apply;
-import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.base.Apply;
+import com.mxcsystem.demo.entity.base.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 

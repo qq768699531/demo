@@ -1,6 +1,6 @@
 package com.mxcsystem.demo.service;
 
-import com.mxcsystem.demo.entity.Worker;
+import com.mxcsystem.demo.entity.base.Worker;
 import com.mxcsystem.demo.mapper.LoginMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

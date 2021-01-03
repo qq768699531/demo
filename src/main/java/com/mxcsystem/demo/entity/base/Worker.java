@@ -1,4 +1,4 @@
-package com.mxcsystem.demo.entity;
+package com.mxcsystem.demo.entity.base;
 
 public class Worker {
     private int ID;

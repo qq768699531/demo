@@ -1,7 +1,6 @@
 package com.mxcsystem.demo.util;
-import com.mxcsystem.demo.entity.Link;
-import com.mxcsystem.demo.entity.User;
-import com.mxcsystem.demo.entity.WorkItem;
+import com.mxcsystem.demo.entity.base.Link;
+import com.mxcsystem.demo.entity.base.User;
 
 
 import java.util.HashSet;

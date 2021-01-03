@@ -1,4 +1,4 @@
-package com.mxcsystem.demo.entity;
+package com.mxcsystem.demo.entity.base;
 
 import com.mxcsystem.demo.mapper.ApplyMapper;
 import com.mxcsystem.demo.mapper.LogMapper;

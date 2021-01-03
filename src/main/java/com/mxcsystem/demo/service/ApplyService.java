@@ -1,7 +1,7 @@
 package com.mxcsystem.demo.service;
 
-import com.mxcsystem.demo.entity.*;
 import com.mxcsystem.demo.entity.WX.WXMessage;
+import com.mxcsystem.demo.entity.base.*;
 import com.mxcsystem.demo.mapper.*;
 import com.mxcsystem.demo.util.MyStringUtil;
 import com.mxcsystem.demo.util.WXUtil;

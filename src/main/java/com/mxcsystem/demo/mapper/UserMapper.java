@@ -1,6 +1,6 @@
 package com.mxcsystem.demo.mapper;
 
-import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.base.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

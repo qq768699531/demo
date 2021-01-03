@@ -1,8 +1,8 @@
 package com.mxcsystem.demo.mapper;
 
-import com.mxcsystem.demo.entity.Apply;
-import com.mxcsystem.demo.entity.Link;
-import com.mxcsystem.demo.entity.Log;
+import com.mxcsystem.demo.entity.base.Apply;
+import com.mxcsystem.demo.entity.base.Link;
+import com.mxcsystem.demo.entity.base.Log;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,7 +31,7 @@ public interface LinkMapper {
             "ID = #{ID} and " +
             "WorkItemType = #{WorkItemType} and " +
             "LinkID = #{LinkID} and " +
-            "LInkWorkItemType = #{LInkWorkItemType}")
+            "LinkWorkItemType = #{LinkWorkItemType}")
     List<Link> getLinkListByLink (Link link);
 
     @Insert("insert into link values(#{ID},#{WorkItemType},#{LinkID},#{LinkWorkItemType})")

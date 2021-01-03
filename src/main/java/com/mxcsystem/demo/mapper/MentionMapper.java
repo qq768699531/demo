@@ -1,9 +1,9 @@
 package com.mxcsystem.demo.mapper;
 
-import com.mxcsystem.demo.entity.Apply;
-import com.mxcsystem.demo.entity.Mention;
-import com.mxcsystem.demo.entity.Log;
-import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.base.Apply;
+import com.mxcsystem.demo.entity.base.Mention;
+import com.mxcsystem.demo.entity.base.Log;
+import com.mxcsystem.demo.entity.base.User;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

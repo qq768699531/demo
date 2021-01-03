@@ -1,8 +1,7 @@
 package com.mxcsystem.demo.controller;
 
-import com.mxcsystem.demo.entity.Apply;
-import com.mxcsystem.demo.entity.Log;
-import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.base.Log;
+import com.mxcsystem.demo.entity.base.User;
 import com.mxcsystem.demo.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

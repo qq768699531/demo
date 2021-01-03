@@ -1,4 +1,4 @@
-package com.mxcsystem.demo.entity;
+package com.mxcsystem.demo.entity.base;
 
 import com.mxcsystem.demo.mapper.DiscussionMapper;
 import com.mxcsystem.demo.mapper.LinkMapper;

@@ -1,6 +1,6 @@
 package com.mxcsystem.demo.util;
 
-import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.base.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package com.mxcsystem.demo.controller;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.base.User;
 import com.mxcsystem.demo.service.LoginService;
 import com.mxcsystem.demo.service.UserService;
 import com.mxcsystem.demo.util.CommonUtil;

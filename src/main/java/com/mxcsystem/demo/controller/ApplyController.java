@@ -1,11 +1,12 @@
 package com.mxcsystem.demo.controller;
 
-import com.mxcsystem.demo.entity.Apply;
-import com.mxcsystem.demo.entity.Follow;
-import com.mxcsystem.demo.entity.Mention;
-import com.mxcsystem.demo.entity.User;
+import com.mxcsystem.demo.entity.base.Apply;
+import com.mxcsystem.demo.entity.base.Follow;
+import com.mxcsystem.demo.entity.base.Mention;
+import com.mxcsystem.demo.entity.base.User;
 import com.mxcsystem.demo.service.ApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,9 +27,9 @@ public class ApplyController {
      * @return 返回apply的id
      */
     @RequestMapping(value = "/createNewApply",method = RequestMethod.POST)
-    public int createNewApply(Apply apply,User user,int isFollow){
+    public int createNewApply(Apply apply,User user,Integer isFollow){
         int result = applyService.createNewApply(apply);
-        if(result == 1){
+        if(result != 0){
             applyService.insertMentionsFromApply(apply);
             applyService.insertLinksFromApply(apply);
             if(isFollow == 1){
