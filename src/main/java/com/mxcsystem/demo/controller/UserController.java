@@ -3,7 +3,6 @@ package com.mxcsystem.demo.controller;
 import com.mxcsystem.demo.entity.base.Follow;
 import com.mxcsystem.demo.entity.base.User;
 import com.mxcsystem.demo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,8 +11,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController (UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping("/info")
     public User getUserInfo(User user){

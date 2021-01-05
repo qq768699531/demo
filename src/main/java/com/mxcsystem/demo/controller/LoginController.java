@@ -17,16 +17,20 @@ import java.util.HashMap;
 
 @RestController
 public class LoginController {
-    @Autowired
-    private LoginService loginService;
-    @Autowired
-    private UserService userService;
+    private final LoginService loginService;
+    private final UserService userService;
     @Resource
     private DefaultKaptcha captchaProducer;
     /**
      * 登录验证码SessionKey
      */
     public static final String LOGIN_VALIDATE_CODE = "login_validate_code";
+
+    public LoginController (LoginService loginService, UserService userService) {
+        this.loginService = loginService;
+        this.userService = userService;
+    }
+
     /**
      * 登录验证码图片
      */
@@ -116,21 +120,32 @@ public class LoginController {
             map = (HashMap<String,Object>) request.getSession().getAttribute("identity");
             return map;
         }
+        String loginPhoneNum = "";
         String loginValidateCode = "";
         //System.out.println(request.getSession().getId());
         try{
-            loginValidateCode = request.getSession().getAttribute(LOGIN_VALIDATE_CODE).toString();
+            String[] key = (String[]) request.getSession().getAttribute(LOGIN_VALIDATE_CODE);
+            loginPhoneNum = key[0];
+            loginValidateCode = key[1];
         }catch (NullPointerException e){
             map.put("validateStatus",null);//验证码过期
         }
-        if(loginValidateCode.equals(validateCode)){
+        if(loginValidateCode.equals(validateCode) && loginPhoneNum.equals(phone)){
             map.put("validateStatus",true);//验证码正确
             map.put("loginStatus",true);
-
-            User user = new User("未知用户",phone);
-            user.setIsManager(0);
-            map.put("user",user);
-            userService.insertUser(user);
+            User user = new User();
+            user.setPhoneNum(phone);
+            if((user = userService.getUserInfo(user))== null){
+                User new_user = new User();
+                new_user.setPhoneNum(phone);
+                new_user.setUsername("未知用户");
+                new_user.setIsManager(0);
+                new_user.setGroupID(0);
+                userService.insertUser(new_user);
+                map.put("user",new_user);
+            }else{
+                map.put("user",user);
+            }
 
             //保存登陆凭证map
             request.getSession().setAttribute("identity",map);

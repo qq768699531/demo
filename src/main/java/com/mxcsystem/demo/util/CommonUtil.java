@@ -86,7 +86,8 @@ public class CommonUtil {
         System.out.println("result = " + result);
         System.out.println("balance = " + balance);
 
-        request.getSession().setAttribute(validateSessionKey,verifyCode);
+        String[] key = {phoneNumber,verifyCode};
+        request.getSession().setAttribute(validateSessionKey,key);
         response.setHeader("sessionId",request.getSession().getId());
 
         System.out.println(verifyCode);

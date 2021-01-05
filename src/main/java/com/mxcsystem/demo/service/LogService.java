@@ -3,7 +3,6 @@ package com.mxcsystem.demo.service;
 import com.mxcsystem.demo.entity.base.*;
 import com.mxcsystem.demo.mapper.*;
 import com.mxcsystem.demo.util.MyStringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -13,16 +12,19 @@ import java.util.Set;
 
 @Service
 public class LogService {
-    @Autowired
-    private LogMapper logMapper;
-    @Autowired
-    private FollowMapper followMapper;
-    @Autowired
-    private MentionMapper mentionMapper;
-    @Autowired
-    private LinkMapper linkMapper;
-    @Autowired
-    private DiscussionMapper discussionMapper;
+    private final LogMapper logMapper;
+    private final FollowMapper followMapper;
+    private final MentionMapper mentionMapper;
+    private final LinkMapper linkMapper;
+    private final DiscussionMapper discussionMapper;
+
+    public LogService (LogMapper logMapper, FollowMapper followMapper, MentionMapper mentionMapper, LinkMapper linkMapper, DiscussionMapper discussionMapper) {
+        this.logMapper = logMapper;
+        this.followMapper = followMapper;
+        this.mentionMapper = mentionMapper;
+        this.linkMapper = linkMapper;
+        this.discussionMapper = discussionMapper;
+    }
 
     public int createNewLog(Log log){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
@@ -118,4 +120,5 @@ public class LogService {
     public List<Log> getNewest5Log(){
         return logMapper.getNewest5Log();
     }
+
 }

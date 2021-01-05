@@ -6,7 +6,6 @@ import com.mxcsystem.demo.mapper.*;
 import com.mxcsystem.demo.util.MyStringUtil;
 import com.mxcsystem.demo.util.WXUtil;
 import me.chanjar.weixin.common.error.WxErrorException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,18 +13,21 @@ import java.util.Set;
 
 @Service
 public class ApplyService {
-    @Autowired
-    private ApplyMapper applyMapper;
-    @Autowired
-    private FollowMapper followMapper;
-    @Autowired
-    private MentionMapper mentionMapper;
-    @Autowired
-    private LinkMapper linkMapper;
-    @Autowired
-    private DiscussionMapper discussionMapper;
-    @Autowired
-    private UserMapper userMapper;
+    private final ApplyMapper applyMapper;
+    private final FollowMapper followMapper;
+    private final MentionMapper mentionMapper;
+    private final LinkMapper linkMapper;
+    private final DiscussionMapper discussionMapper;
+    private final UserMapper userMapper;
+
+    public ApplyService (ApplyMapper applyMapper, FollowMapper followMapper, MentionMapper mentionMapper, LinkMapper linkMapper, DiscussionMapper discussionMapper, UserMapper userMapper) {
+        this.applyMapper = applyMapper;
+        this.followMapper = followMapper;
+        this.mentionMapper = mentionMapper;
+        this.linkMapper = linkMapper;
+        this.discussionMapper = discussionMapper;
+        this.userMapper = userMapper;
+    }
 
     /**
      *
@@ -35,6 +37,9 @@ public class ApplyService {
     public int createNewApply(Apply apply){
         applyMapper.createNewApply(apply);
         return apply.getID();
+    }
+    public int updateApply(Apply apply){
+        return applyMapper.updateApply(apply);
     }
 
     public int updateApplyWhileNotSubmit(Apply apply){
@@ -100,7 +105,7 @@ public class ApplyService {
         mention.setStatus(1);
         for (User user:userSet) {
             mention.setPhoneNum(user.getPhoneNum());
-            mention.setTitle(user.getUsername());
+            mention.setTitle(apply.getTitle());
             mention.setAssignTo(user.getPhoneNum());
             if(mentionMapper.getMentionListByMention(mention).size() == 0){
                 mentionMapper.insertMention(mention);
@@ -170,5 +175,9 @@ public class ApplyService {
 
     public List<Apply> getNewest5Apply(){
         return applyMapper.getNewest5Apply();
+    }
+
+    public Apply getApplyByID (Apply apply) {
+        return applyMapper.getApplyByID(apply.getID());
     }
 }

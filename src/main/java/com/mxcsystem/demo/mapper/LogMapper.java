@@ -12,11 +12,11 @@ public interface LogMapper {
     @Insert("insert into log " +
             "(Title,Departments,AssignedTo,Status," +
             "LogDate,Record,Defect,Attachments,History," +
-            "CreatedBy,CreatedDate,ActivatedDate,ActivatedBy,ClosedDate,ClosedBy,ResolvedDate,ResolvedBy) " +
+            "CreatedBy,CreatedDate) " +
             "values" +
             "(#{Title},#{Departments},#{AssignedTo},#{Status}," +
             "NOW(),#{Record},#{Defect},#{Attachments},#{Status}," +
-            "#{CreatedBy},#{CreatedDate},#{ActivatedDate},#{ActivatedBy},#{ClosedDate},#{ClosedBy},#{ResolvedDate},#{ResolvedBy})")
+            "#{CreatedBy},NOW())")
     @Options(useGeneratedKeys = true, keyProperty = "ID")
     int createNewLog(Log log);
 

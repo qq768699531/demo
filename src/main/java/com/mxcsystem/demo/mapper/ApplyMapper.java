@@ -10,16 +10,38 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ApplyMapper {
+
     @Insert("insert into apply " +
-            "(Title,Departments,CreatedBy,CreatedDate,AssignedTo,Status,History," +
+            "(Title,Departments,CreatedBy,CreatedDate,FinishDate,AssignedTo,Status,History," +
             "Reason,MissionStatement,Analysis,Attachments,CorrectiveActionPlan," +
             "Applyer,ApplyerOwner,ApplicationType,ApplicationAmount) " +
             "values" +
-            "(#{Title},#{Departments},#{CreatedBy},NOW(),#{AssignedTo},#{Status},#{Status}," +
+            "(#{Title},#{Departments},#{CreatedBy},NOW(),#{FinishDate},#{AssignedTo},#{Status},#{Status}," +
             "#{Reason},#{MissionStatement},#{Analysis},#{Attachments},#{CorrectiveActionPlan}," +
             "#{Applyer},#{ApplyerOwner},#{ApplicationType},#{ApplicationAmount})")
     @Options(useGeneratedKeys = true, keyProperty = "ID", keyColumn = "ID")
     void createNewApply(Apply apply);
+
+    @Update("<script>" +
+            "update apply set " +
+            "Title = #{Title}," +
+            "Departments = #{Departments}," +
+            "AssignedTo = #{AssignedTo}," +
+            "Status = #{Status}," +
+            "History = CONCAT(Status,'|',History)," +
+            "MissionStatement = #{MissionStatement}," +
+            "<if test='Status == 2'>ActivatedDate = NOW(),ActivatedBy = #{ActivatedBy},</if>" +
+            "<if test='Status == 3'>ResolvedDate = NOW(),ResolvedBy = #{ResolvedBy},</if>" +
+            "<if test='Status == 5'>ClosedDate = NOW(),ClosedBy = #{ClosedBy},</if>" +
+            "FinishDate = #{FinishDate},"+
+            "Applyer = #{Applyer}," +
+            "ApplyerOwner = #{ApplyerOwner}," +
+            "ApplyerOwnerNote = #{ApplyerOwnerNote}," +
+            "ApplicationType = #{ApplicationType}," +
+            "ApplicationAmount = #{ApplicationAmount} " +
+            "where ID = #{ID}" +
+            "</script>")
+    int updateApply(Apply apply);
 
     @Update("update apply set " +
             "History = CONCAT('1|',History)," +
@@ -88,4 +110,6 @@ public interface ApplyMapper {
 
     @Select("select * from apply order by CreatedDate desc limit 5")
     List<Apply> getNewest5Apply();
+
+
 }

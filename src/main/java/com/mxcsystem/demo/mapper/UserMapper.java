@@ -1,10 +1,7 @@
 package com.mxcsystem.demo.mapper;
 
 import com.mxcsystem.demo.entity.base.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +11,7 @@ import java.util.List;
 public interface UserMapper {
 
     @Select("select * from user where PhoneNum = #{PhoneNum}")
-    User getUserInfo(User user);
+    User getUserInfoByPhoneNum (String PhoneNum);
 
     //获取同组人员
     @Select("select * from user where GroupID = #{GroupID}")

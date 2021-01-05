@@ -13,17 +13,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/log")
 public class LogController {
-    @Autowired
-    private LogService logService;
+    private final LogService logService;
+
+    public LogController (LogService logService) {
+        this.logService = logService;
+    }
 
     //用户创建新日志,返回日志ID为成功,0为失败
     @RequestMapping(value = "/createNewLog",method = RequestMethod.POST)
-    public int createNewApply(Log log,int isFollow,User user){
+    public int createNewApply(Log log,boolean isFollow,User user){
         int result = logService.createNewLog(log);
         if(result == 1){
             logService.insertMentionsFromLog(log);
             logService.insertLinksFromLog(log);
-            if(isFollow == 1){
+            if(isFollow){
                 logService.insertFollowFromLog(log,user);
             }
         }

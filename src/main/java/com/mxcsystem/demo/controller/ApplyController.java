@@ -1,12 +1,7 @@
 package com.mxcsystem.demo.controller;
 
-import com.mxcsystem.demo.entity.base.Apply;
-import com.mxcsystem.demo.entity.base.Follow;
-import com.mxcsystem.demo.entity.base.Mention;
-import com.mxcsystem.demo.entity.base.User;
+import com.mxcsystem.demo.entity.base.*;
 import com.mxcsystem.demo.service.ApplyService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +11,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/apply")
 public class ApplyController {
-    @Autowired
-    private ApplyService applyService;
+    private final ApplyService applyService;
+
+    public ApplyController (ApplyService applyService) {
+        this.applyService = applyService;
+    }
 
     /**
      *
@@ -27,12 +25,12 @@ public class ApplyController {
      * @return 返回apply的id
      */
     @RequestMapping(value = "/createNewApply",method = RequestMethod.POST)
-    public int createNewApply(Apply apply,User user,Integer isFollow){
+    public int createNewApply(Apply apply,User user,boolean isFollow){
         int result = applyService.createNewApply(apply);
         if(result != 0){
             applyService.insertMentionsFromApply(apply);
             applyService.insertLinksFromApply(apply);
-            if(isFollow == 1){
+            if(isFollow){
                 applyService.insertFollowFromApply(apply,user);
             }
         }
@@ -48,7 +46,7 @@ public class ApplyController {
      * @return 0为失败，1为成功
      */
     @RequestMapping(value = "/updateApplyWhileNotSubmit",method = RequestMethod.POST)
-    public int updateApplyWhileNotSubmit(Apply apply){
+    public int updateApplyWhileNotSubmit(Apply apply,User user,boolean isFollow){
         int result = applyService.updateApplyWhileNotSubmit(apply);
         if(result == 1){
             //删除后重新插入，因为可能会有修改，前端没有保存修改前数据
@@ -56,6 +54,23 @@ public class ApplyController {
             applyService.insertMentionsFromApply(apply);
             applyService.deleteLinksByApplyID(apply);
             applyService.insertLinksFromApply(apply);
+            applyService.deleteFollowFromApply(apply,user);
+            if(isFollow)applyService.insertFollowFromApply(apply,user);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/updateApply",method = RequestMethod.POST)
+    public int updateApply(Apply apply,User user,boolean isFollow){
+        int result = applyService.updateApply(apply);
+        if(result == 1){
+            //删除后重新插入，因为可能会有修改，前端没有保存修改前数据
+            applyService.deleteMentionsByApplyID(apply);
+            applyService.insertMentionsFromApply(apply);
+            applyService.deleteLinksByApplyID(apply);
+            applyService.insertLinksFromApply(apply);
+            applyService.deleteFollowFromApply(apply,user);
+            if(isFollow)applyService.insertFollowFromApply(apply,user);
         }
         return result;
     }
@@ -167,4 +182,8 @@ public class ApplyController {
         return applyService.getNewest5Apply();
     }
 
+    @RequestMapping(value = "/getApplyByID",method = RequestMethod.GET)
+    public Apply getApplyByID(Apply apply){
+        return applyService.getApplyByID(apply);
+    }
 }

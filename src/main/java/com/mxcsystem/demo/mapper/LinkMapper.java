@@ -3,10 +3,7 @@ package com.mxcsystem.demo.mapper;
 import com.mxcsystem.demo.entity.base.Apply;
 import com.mxcsystem.demo.entity.base.Link;
 import com.mxcsystem.demo.entity.base.Log;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

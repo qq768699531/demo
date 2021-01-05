@@ -1,11 +1,9 @@
 package com.mxcsystem.demo.controller;
 
 import com.mxcsystem.demo.entity.WX.WXMessage;
-import com.mxcsystem.demo.mapper.UserMapper;
 import com.mxcsystem.demo.service.UserService;
 import com.mxcsystem.demo.util.WXUtil;
 import me.chanjar.weixin.common.error.WxErrorException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,8 +11,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class DemoController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public DemoController (UserService userService) {
+        this.userService = userService;
+    }
+
     @RequestMapping("test")
     @ResponseBody
     public String Test(){

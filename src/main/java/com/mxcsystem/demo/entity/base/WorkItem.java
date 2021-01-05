@@ -1,21 +1,79 @@
 package com.mxcsystem.demo.entity.base;
 
+import com.mxcsystem.demo.mapper.UserMapper;
+import com.mxcsystem.demo.util.SpringUtil;
+
 public class WorkItem {
+    private UserMapper userMapper =
+            (UserMapper) SpringUtil.applicationContext.getBean("userMapper");
     private int ID;
     private int Status;
     private String Title;
     private String Departments;
+
     private String CreatedBy;
     private String CreatedDate;
+    private String CreatedByName;
     private String ActivatedBy;
     private String ActivatedDate;
+    private String ActivatedByName;
     private String ResolvedBy;
     private String ResolvedDate;
+    private String ResolvedByName;
     private String ClosedBy;
     private String ClosedDate;
-    private String History;
+    private String ClosedByName;
+
     private String AssignedTo;
+    private String AssignedToName;
+
+    private String History;
     private String FinishDate;
+
+    public String getAssignedToName () {
+        User user = userMapper.getUserInfoByPhoneNum(AssignedTo);
+        return user==null?AssignedToName:user.getUsername();
+    }
+
+    public void setAssignedToName (String assignedToName) {
+        AssignedToName = assignedToName;
+    }
+
+    public String getCreatedByName () {
+        User user = userMapper.getUserInfoByPhoneNum(CreatedBy);
+        return user==null?CreatedByName:user.getUsername();
+    }
+
+    public void setCreatedByName (String createdByName) {
+        CreatedByName = createdByName;
+    }
+
+    public String getActivatedByName () {
+        User user = userMapper.getUserInfoByPhoneNum(ActivatedBy);
+        return user==null?ActivatedByName:user.getUsername();
+    }
+
+    public void setActivatedByName (String activatedByName) {
+        ActivatedByName = activatedByName;
+    }
+
+    public String getResolvedByName () {
+        User user = userMapper.getUserInfoByPhoneNum(ResolvedBy);
+        return user==null?ResolvedByName:user.getUsername();
+    }
+
+    public void setResolvedByName (String resolvedByName) {
+        ResolvedByName = resolvedByName;
+    }
+
+    public String getClosedByName () {
+        User user = userMapper.getUserInfoByPhoneNum(ClosedBy);
+        return user==null?ClosedByName:user.getUsername();
+    }
+
+    public void setClosedByName (String closedByName) {
+        ClosedByName = closedByName;
+    }
 
     public String getFinishDate () {
         return FinishDate;

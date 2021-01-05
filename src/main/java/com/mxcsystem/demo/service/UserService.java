@@ -4,20 +4,22 @@ import com.mxcsystem.demo.entity.base.Follow;
 import com.mxcsystem.demo.entity.base.User;
 import com.mxcsystem.demo.mapper.FollowMapper;
 import com.mxcsystem.demo.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserService {
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private FollowMapper followMapper;
+    private final UserMapper userMapper;
+    private final FollowMapper followMapper;
+
+    public UserService (UserMapper userMapper, FollowMapper followMapper) {
+        this.userMapper = userMapper;
+        this.followMapper = followMapper;
+    }
 
     public User getUserInfo(User user){
-        return userMapper.getUserInfo(user);
+        return userMapper.getUserInfoByPhoneNum(user.getPhoneNum());
     }
 
     public List<User> getGroupMember (User user) {
@@ -47,7 +49,7 @@ public class UserService {
     }
 
     public void insertUser (User user) {
-        if(userMapper.getUserInfo(user) == null){
+        if(userMapper.getUserInfoByPhoneNum(user.getPhoneNum()) == null){
             userMapper.insertUser(user);
         }
     }
